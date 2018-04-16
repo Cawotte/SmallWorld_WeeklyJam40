@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Obstacle
+  - Water
+  - Collectible
+  - Exit
+  - Wood
+  - Passage
   layers:
   - Default
   - TransparentFX

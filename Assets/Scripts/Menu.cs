@@ -4,9 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour {
-
-	public void playGame()
+    
+	public void PlayGame()
     {
-		SceneManager.LoadScene (1);
+		SceneManager.LoadScene("Level1");
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Game Quitted !");
+        Application.Quit();
     }
 }
