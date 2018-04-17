@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[System.Serializable]
 public class Bridge {
 
-    [SerializeField] public Tilemap bridgesTilemap;
-    public Sprite bridgeSprite;
-    
+
+    public Tilemap bridgesTilemap;
+    //public Sprite bridgeSprite; //= (Sprite)Resources.Load("Sprites/basictiles_8");
+    public RuleTile tileBridge;
+    public BridgeTiles bridgetiles; 
+
     private bool hasEnd = false;
-    private List<Vector2> plankCoords = new List<Vector2>();
+    [SerializeField] private List<Vector2> plankCoords = new List<Vector2>();
 
 
     /*  Bridge rules :
@@ -18,26 +22,39 @@ public class Bridge {
      *  
      * 
      * */
-
+     
     //Constructors
-    public Bridge(Tilemap bridgesTilemap, Sprite bridgeSprite)
+    public Bridge(Tilemap bridgesTilemap, RuleTile tileBridge, BridgeTiles bridgeTiles)
     {
         this.bridgesTilemap = bridgesTilemap;
-        this.bridgeSprite = bridgeSprite;
+        this.tileBridge = tileBridge;
+        this.bridgetiles = bridgeTiles;
     }
+
+        /*
+    public Bridge InitB(Tilemap bridgesTilemap)
+    {
+        this.bridgesTilemap = bridgesTilemap;
+        plankCoords = new List<Vector2>();
+
+        return this;
+    } */
 
 
     //Methods
     public void addPlank(Vector2 plankCoor)
     {
-        Tile bridgeTile = ScriptableObject.CreateInstance<Tile>();
-        bridgeTile.sprite = bridgeSprite;
+        //Tile bridgeTile = ScriptableObject.CreateInstance<Tile>();
+        //bridgeTile.sprite = bridgeSprite;
 
         plankCoords.Add(plankCoor);
 
-        Vector3Int cellCoor = bridgesTilemap.WorldToCell(plankCoor);
-        bridgesTilemap.SetTile(cellCoor, bridgeTile);
-        bridgesTilemap.RefreshTile(cellCoor);
+        /*Vector3Int cellCoor = bridgesTilemap.WorldToCell(plankCoor);
+        bridgesTilemap.SetTile(cellCoor, tileBridge);
+        //bridgesTilemap.RefreshTile(cellCoor);
+        bridgesTilemap.RefreshAllTiles(); */
+
+        bridgetiles.renderTiles(bridgesTilemap, plankCoords);
 
     }
 
@@ -122,9 +139,18 @@ public class Bridge {
     {
         foreach (Bridge bridge in bridgeList)
         {
-            if (bridge.contains(PlankPos))
-                return bridge;
+            foreach (Vector2 pos in bridge.plankCoords)
+            {
+                //Debug.Log("Pos =" + pos.ToString());
+                if (Vector2.Distance(pos, PlankPos) <= float.Epsilon )
+                    return bridge;
+            }
+            //if (bridge.contains(PlankPos))
+               /// return bridge;
+            
         }
+
+        Debug.Log("Coor not found : " + PlankPos.ToString());
 
         return null;
     }

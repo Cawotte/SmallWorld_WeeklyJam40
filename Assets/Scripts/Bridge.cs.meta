@@ -1,11 +1,13 @@
 fileFormatVersion: 2
 guid: d9fe864e00d07f441804bac21be3db41
-timeCreated: 1523883707
+timeCreated: 1523961003
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bridgeSprite: {fileID: 21300016, guid: 163d39b81baab7047bea3f422fa03b20, type: 3}
+  - bridgesTilemap: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -11,6 +11,8 @@ TagManager:
   - Exit
   - Wood
   - Passage
+  - Key
+  - Door
   layers:
   - Default
   - TransparentFX

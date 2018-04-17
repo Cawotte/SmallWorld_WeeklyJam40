@@ -4,35 +4,42 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;	
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Player : MonoBehaviour {
 
     public Tilemap groundTiles;
     public Tilemap obstacleTiles;
     public Tilemap bridgeTiles;
+    public TextMeshProUGUI woodText;
+    public TextMeshProUGUI keyText;
     public int woodCount = 0;
+    public int keyCount = 0;
 
+    [HideInInspector] public bool isMoving = false;
+    private bool onCooldown = false;
+    private bool onExit = false;
     private float moveTime = 0.1f;
-    private bool isMoving = false;
-    private bool canAct = true;
-    private Sprite characterSprite; 
 
-    public Sprite bridgeSprite;
-    [SerializeField]
-    private Bridge currentBridge;
-    private List<Bridge> bridges = new List<Bridge>();
+    public RuleTile tileBridge;
+    public BridgeTiles bridge;
+    public Bridge currentBridge;
+    public List<Bridge> bridges;
 
     // Use this for initialization
     void Start () {
 
-        characterSprite = GetComponent<Sprite>();
-	}
+        updateKeyText();
+        updateWoodText();
+        bridges = new List<Bridge>();
+        //characterSprite = GetComponent<Sprite>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
         //We do nothing if the player is still moving.
-        if (isMoving || !canAct ) return;
+        if (isMoving || onCooldown || onExit ) return;
 
         //To store move directions.
         int horizontal = 0;
@@ -47,7 +54,7 @@ public class Player : MonoBehaviour {
         //If there's a direction, we are trying to move.
         if (horizontal != 0 || vertical != 0)
         {
-            StartCoroutine(actionCooldown());
+            StartCoroutine(actionCooldown(0.2f));
             Move(horizontal, vertical);
         }
 
@@ -70,17 +77,38 @@ public class Player : MonoBehaviour {
 
             //If the front tile is a walkable ground tile, the player moves here.
             if (hasGroundTile && !hasObstacleTile)
-                StartCoroutine(SmoothMovement(targetCell));
+            {
+                Collider2D coll = whatsThere(targetCell);
+
+                //If there's a door in front of the character
+                if ( coll != null && coll.tag == "Door" )
+                {
+                    Door door = coll.gameObject.GetComponent<Door>();
+                    //If the door is closed and we can open it
+                    if ( door.IsClosed() && keyCount > 0 )
+                    {
+                        keyCount--; updateKeyText();
+                        door.open();
+                        StartCoroutine(SmoothMovement(targetCell));
+                    }
+                    else if ( !door.IsClosed()) //If it's already opened
+                        StartCoroutine(SmoothMovement(targetCell));
+                    else //If it's closed.
+                        StartCoroutine(BlockedMovement(targetCell));
+                }
+                else
+                    StartCoroutine(SmoothMovement(targetCell));
+            }
 
             //If the front tile is a bridge plank
             else if (hasBridgeTile)
             {
                 currentBridge = Bridge.belongsTo(bridges, targetCell);
-
+                Debug.Log(currentBridge);
                 //We verify we are entering the bridge from one of its extremity 
                 if (currentBridge.isExtremity(targetCell))
                 {
-                    Debug.Log("Entering a bridge!");
+                    //Debug.Log("Entering a bridge!");
                     // If we are entering the bridge from the start, we reverse end/beginning to handle its treatement more easily.
                     if (currentBridge.firstPlank().Equals(targetCell))
                         currentBridge.reverseBridge();
@@ -94,9 +122,11 @@ public class Player : MonoBehaviour {
             //If the player has wood to build a new bridge over the water, he build a bridge and moves there.
             else if (!hasGroundTile && !hasBridgeTile && woodCount > 0)
             {
-                Debug.Log("Building a new bridge !");
-                woodCount--;
-                currentBridge = new Bridge(bridgeTiles, bridgeSprite); //We create a new bridge
+                //Debug.Log("Building a new bridge !");
+                woodCount--; updateWoodText();
+                currentBridge = new Bridge(bridgeTiles, tileBridge, bridge); //We create a new bridge
+                //currentBridge = ScriptableObject.CreateInstance<Bridge>().InitB(bridgeTiles);
+                //currentBridge.initB(bridgeTiles);
                 bridges.Add(currentBridge); //We add it to the bridge list
                 currentBridge.addPlank(targetCell); //We add a plank to the bridge
                 StartCoroutine(SmoothMovement(targetCell)); //We move to this new plank.
@@ -108,16 +138,16 @@ public class Player : MonoBehaviour {
             //If they are leaving the bridge for a walkable ground tile.
             if (hasGroundTile && !hasObstacleTile)
             {
-                Debug.Log("Leaving a bridge !");
+                //Debug.Log("Leaving a bridge !");
                 StartCoroutine(SmoothMovement(targetCell));
 
                 //If we are leaving the last plank of the bridge, we delete it.
                 if ( currentBridge.firstPlank().Equals(startCell))
                 {
-                    Debug.Log("Deleting the bridge !");
+                    //Debug.Log("Deleting the bridge !");
                     currentBridge.removeLastPlank();
                     bridges.Remove(currentBridge);
-                    woodCount++;
+                    woodCount++; updateWoodText();
                 }
                 else
                     currentBridge.setHasEnd(true); //The bridge get an end.
@@ -127,18 +157,18 @@ public class Player : MonoBehaviour {
             //If they keep walking toward the water, they have wood, and it's the end of the bridge.
             else if ( !hasGroundTile && !hasBridgeTile && woodCount > 0 && currentBridge.isOnLastPlank(startCell) )
             {
-                Debug.Log("adding a plank!");
-                woodCount--;
+                //Debug.Log("adding a plank!");
+                woodCount--; updateWoodText();
                 currentBridge.addPlank(targetCell);
                 StartCoroutine(SmoothMovement(targetCell));
             }
             //If they are backtracking the bridge
             else if ( currentBridge.playerIsBackTracking(startCell, targetCell) )
             {
-                Debug.Log("Backtracking!");
+                //Debug.Log("Backtracking!");
                 StartCoroutine(SmoothMovement(targetCell));
                 currentBridge.removeLastPlank();
-                woodCount++;
+                woodCount++; updateWoodText();
             }
 
         }
@@ -151,6 +181,8 @@ public class Player : MonoBehaviour {
 
     private IEnumerator SmoothMovement(Vector3 end)
     {
+        //while (isMoving) yield return null;
+
         isMoving = true;
 
         float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
@@ -171,14 +203,15 @@ public class Player : MonoBehaviour {
     //Blocked animation
     private IEnumerator BlockedMovement(Vector3 end)
     {
-        Debug.Log("Blocked");
+        //while (isMoving) yield return null;
+
         isMoving = true;
 
         Vector3 originalPos = transform.position;
 
         end = transform.position + ((end - transform.position) / 3);
         float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-        float inverseMoveTime = (1 / moveTime)/2;
+        float inverseMoveTime = (1 / (moveTime*2) );
 
         while (sqrRemainingDistance > float.Epsilon)
         {
@@ -202,17 +235,62 @@ public class Player : MonoBehaviour {
         isMoving = false;
     }
 
-    private IEnumerator actionCooldown()
+    public IEnumerator Teleport(PassageWay Teleporter, float aTime)
     {
-        canAct = false;
 
-        float cooldown = 0.2f;
+        //If the teleporter is in use, abort
+        if (Teleporter.isTeleporting) yield break;
+
+        //We wait for any other movement coroutines to finish before starting this one.
+        while (isMoving) yield return null;
+
+        isMoving = true;
+
+        Debug.Log("Teleporting from " + name);
+
+        //We set both teleporters as "In Use"
+        Teleporter.setTeleportersAvailability(true);
+        //we prevent the player from moving while teleporting
+
+        float alpha = GetComponent<Renderer>().material.color.a;
+
+        //The character disappear
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
+        {
+            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, 0f, t));
+            GetComponent<Renderer>().material.color = newColor;
+            yield return null;
+        }
+
+        //Now me teleport the player
+        transform.position = Teleporter.exitPos();
+
+        //The character fades back to reality 
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
+        {
+            Color newColor = new Color(1, 1, 1, Mathf.Lerp(0f, alpha, t));
+            GetComponent<Renderer>().material.color = newColor;
+            yield return null;
+        }
+
+        //We allow the player to move again
+        isMoving = false;
+        //We set both teleporter as "Available"
+        Teleporter.setTeleportersAvailability(false);
+    }
+
+    private IEnumerator actionCooldown(float cooldown)
+    {
+        onCooldown = true;
+
+        //float cooldown = 0.2f;
         while ( cooldown > 0f )
         {
             cooldown -= Time.deltaTime;
             yield return null;
         }
-        canAct = true;
+
+        onCooldown = false;
     }
 
     IEnumerator Teleport(Vector2 targetPos, float aTime)
@@ -241,28 +319,53 @@ public class Player : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log("Something touched!");
+        //Debug.Log("Something touched!");
         //If we collided with the exit, we load the next level in two seconds.
         if ( coll.tag == "Exit")
         {
             Debug.Log("Sortie touché!");
-            canAct = false; //Prevent the player from moving.
+            onExit = true; //Prevent the player from moving.
             Invoke("NextLevel", 0.9f);
             //enabled = false;
         }
         else if ( coll.tag == "Wood")
         {
-            woodCount++;
-            Debug.Log("You picked up wood ! You have " + woodCount + "piece of woods.");
+            woodCount++; updateWoodText();
+            //Debug.Log("You picked up wood ! You have " + woodCount + "piece of woods.");
             coll.gameObject.SetActive(false);
         }
         else if ( coll.tag == "Passage" )
         {
-            Debug.Log("Teleport!");
+            //Debug.Log("Teleport!");
             PassageWay passage = coll.gameObject.GetComponent<PassageWay>();
-            StartCoroutine( Teleport(passage.exitPos(), 0.2f));
+            //StartCoroutine(Teleport(passage, 0.2f));
+            StartCoroutine(passage.Teleport(this, 0.2f));
+            //StartCoroutine(actionCooldown(0.4f));
+        }
+        else if ( coll.tag == "Key" )
+        {
+            Debug.Log("Key picked!");
+            keyCount++; updateKeyText();
+            coll.gameObject.SetActive(false);
         }
     }
+
+    public Collider2D whatsThere(Vector2 targetPos)
+    {
+        RaycastHit2D hit;
+        hit = Physics2D.Linecast(targetPos, targetPos);
+        return hit.collider;
+    }
+
+    public void updateWoodText()
+    {
+        woodText.text = "wood:" + woodCount;
+    }
+    public void updateKeyText()
+    {
+        keyText.text = "keys:" + keyCount;
+    }
+
 
     private void NextLevel()
     {

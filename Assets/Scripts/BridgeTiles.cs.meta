@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: b5d110073b4b63c418e3e1661f693331
+timeCreated: 1524003099
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - defaultSprite: {fileID: 21300628, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - horizontal: {fileID: 21300528, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - vertical: {fileID: 21300530, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - bottomEnd: {fileID: 21300592, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - topEnd: {fileID: 21300594, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - leftEnd: {fileID: 21300598, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - rightEnd: {fileID: 21300596, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - corner1: {fileID: 21300532, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - corner2: {fileID: 21300560, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - corner3: {fileID: 21300564, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  - corner4: {fileID: 21300562, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
