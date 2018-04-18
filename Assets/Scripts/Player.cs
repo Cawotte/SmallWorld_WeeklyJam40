@@ -8,23 +8,23 @@ using TMPro;
 
 public class Player : MonoBehaviour {
 
-    public Tilemap groundTiles;
-    public Tilemap obstacleTiles;
-    public Tilemap bridgeTiles;
+    public Tilemap groundTilemap;
+    public Tilemap obstaclesTilemap;
+    public Tilemap bridgesTilemap;
     public TextMeshProUGUI woodText;
     public TextMeshProUGUI keyText;
     public int woodCount = 0;
-    public int keyCount = 0;
-
+    public int keyCount = 0; 
     [HideInInspector] public bool isMoving = false;
+
+    public BridgeTiles bridgeTiles;
+    private Bridge currentBridge;
+    private List<Bridge> bridges;
     private bool onCooldown = false;
     private bool onExit = false;
     private float moveTime = 0.1f;
 
-    public RuleTile tileBridge;
-    public BridgeTiles bridge;
-    public Bridge currentBridge;
-    public List<Bridge> bridges;
+    //public RuleTile tileBridge;
 
     // Use this for initialization
     void Start () {
@@ -65,11 +65,11 @@ public class Player : MonoBehaviour {
         Vector2 startCell = transform.position;
         Vector2 targetCell = startCell + new Vector2(xDir, yDir);
 
-        bool isOnGround = getCell(groundTiles, startCell) != null; //If the player is on the ground
-        bool isOnBridge = getCell(bridgeTiles, startCell) != null; //If the player is on a bridge
-        bool hasGroundTile = getCell(groundTiles, targetCell) != null; //If target Tile has a ground
-        bool hasObstacleTile = getCell(obstacleTiles, targetCell) != null; //if target Tile has an obstacle
-        bool hasBridgeTile = getCell(bridgeTiles, targetCell) != null; //if target Tile has a bridge (plank)
+        bool isOnGround = getCell(groundTilemap, startCell) != null; //If the player is on the ground
+        bool isOnBridge = getCell(bridgesTilemap, startCell) != null; //If the player is on a bridge
+        bool hasGroundTile = getCell(groundTilemap, targetCell) != null; //If target Tile has a ground
+        bool hasObstacleTile = getCell(obstaclesTilemap, targetCell) != null; //if target Tile has an obstacle
+        bool hasBridgeTile = getCell(bridgesTilemap, targetCell) != null; //if target Tile has a bridge (plank)
 
         //If the player starts their movement from a ground tile.
         if (isOnGround)
@@ -120,11 +120,11 @@ public class Player : MonoBehaviour {
                     currentBridge = null;
             }
             //If the player has wood to build a new bridge over the water, he build a bridge and moves there.
-            else if (!hasGroundTile && !hasBridgeTile && woodCount > 0)
+            else if (!hasGroundTile && !hasBridgeTile && woodCount > 0 && !hasObstacleTile )
             {
                 //Debug.Log("Building a new bridge !");
                 woodCount--; updateWoodText();
-                currentBridge = new Bridge(bridgeTiles, tileBridge, bridge); //We create a new bridge
+                currentBridge = new Bridge(bridgesTilemap, bridgeTiles); //We create a new bridge
                 //currentBridge = ScriptableObject.CreateInstance<Bridge>().InitB(bridgeTiles);
                 //currentBridge.initB(bridgeTiles);
                 bridges.Add(currentBridge); //We add it to the bridge list
@@ -135,8 +135,11 @@ public class Player : MonoBehaviour {
         //If the player starts their movement from a bridge tile
         else if (isOnBridge)
         {
+            //If there's an obstacle
+            if ( hasObstacleTile )
+                StartCoroutine(BlockedMovement(targetCell));
             //If they are leaving the bridge for a walkable ground tile.
-            if (hasGroundTile && !hasObstacleTile)
+            else if (hasGroundTile && !hasObstacleTile)
             {
                 //Debug.Log("Leaving a bridge !");
                 StartCoroutine(SmoothMovement(targetCell));

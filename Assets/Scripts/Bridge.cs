@@ -9,7 +9,7 @@ public class Bridge {
 
     public Tilemap bridgesTilemap;
     //public Sprite bridgeSprite; //= (Sprite)Resources.Load("Sprites/basictiles_8");
-    public RuleTile tileBridge;
+    //public RuleTile tileBridge;
     public BridgeTiles bridgetiles; 
 
     private bool hasEnd = false;
@@ -24,10 +24,10 @@ public class Bridge {
      * */
      
     //Constructors
-    public Bridge(Tilemap bridgesTilemap, RuleTile tileBridge, BridgeTiles bridgeTiles)
+    public Bridge(Tilemap bridgesTilemap, BridgeTiles bridgeTiles)
     {
         this.bridgesTilemap = bridgesTilemap;
-        this.tileBridge = tileBridge;
+        //this.tileBridge = tileBridge;
         this.bridgetiles = bridgeTiles;
     }
 

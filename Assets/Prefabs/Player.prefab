@@ -37,8 +37,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1350827620005712}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.5, y: -1.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -7.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -117,22 +117,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3c576275abf3c4f8cd697dd9fbd514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTiles: {fileID: 0}
-  obstacleTiles: {fileID: 0}
-  bridgeTiles: {fileID: 0}
+  groundTilemap: {fileID: 8195094279638792016, guid: 94383120c2f3bf54eb2660e52a0898a1,
+    type: 2}
+  obstaclesTilemap: {fileID: 8195094281969551658, guid: 94383120c2f3bf54eb2660e52a0898a1,
+    type: 2}
+  bridgesTilemap: {fileID: 8195094280582714344, guid: 94383120c2f3bf54eb2660e52a0898a1,
+    type: 2}
   woodText: {fileID: 0}
   keyText: {fileID: 0}
   woodCount: 0
   keyCount: 0
   isMoving: 0
-  tileBridge: {fileID: 11400000, guid: 9990c1ba255b15d46a63f014a4e69168, type: 2}
-  bridge: {fileID: 11400000, guid: 378e874598585c7459d01ac941b6e847, type: 2}
-  currentBridge:
-    bridgesTilemap: {fileID: 0}
-    tileBridge: {fileID: 0}
-    bridgetiles: {fileID: 0}
-    plankCoords: []
-  bridges: []
+  bridgeTiles: {fileID: 11400000, guid: ecb37429cf62c0a4996c2e90ba37f8ef, type: 2}
 --- !u!212 &212804010506603314
 SpriteRenderer:
   m_ObjectHideFlags: 1
