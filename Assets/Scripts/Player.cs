@@ -401,6 +401,9 @@ public class Player : MonoBehaviour {
             woodCount++; updateWoodText();
             //Debug.Log("You picked up wood ! You have " + woodCount + "piece of woods.");
             coll.gameObject.SetActive(false);
+
+            if (AudioManager.getInstance() != null)
+                AudioManager.getInstance().Find("test").source.Play();
         }
         else if ( coll.tag == "Passage" )
         {

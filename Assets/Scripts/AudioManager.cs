@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour {
 
     //Musics
     public Sound[] musics;
-    int num_music;
+    int num_music = 0;
     public Sound music;
 
     

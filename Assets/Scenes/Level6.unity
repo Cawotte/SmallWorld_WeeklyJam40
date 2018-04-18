@@ -3502,7 +3502,7 @@ Prefab:
         type: 2}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 04c8d715bb66cfd4f8aeaaade5095c8f, type: 2}
+      objectReference: {fileID: 9100000, guid: 030f48032b124b745af86bee001384b1, type: 2}
     - target: {fileID: 4948948529046156, guid: 1c51435b5dddc814987522d29c1905f2, type: 2}
       propertyPath: m_LocalScale.x
       value: 1
