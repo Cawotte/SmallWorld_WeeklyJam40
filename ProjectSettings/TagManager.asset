@@ -13,6 +13,8 @@ TagManager:
   - Passage
   - Key
   - Door
+  - Lever
+  - LeveredDoor
   layers:
   - Default
   - TransparentFX
