@@ -57,11 +57,7 @@ public class Bridge {
         bridgetiles.renderTiles(bridgesTilemap, plankCoords);
 
     }
-
-    public void removeFirstPlank()
-    {
-        plankCoords.RemoveAt(0);
-    }
+    
     public void removeLastPlank()
     {
         if (hasEnd) hasEnd = false;
@@ -71,7 +67,8 @@ public class Bridge {
 
         Vector3Int cellCoor = bridgesTilemap.WorldToCell(removedCoor);
         bridgesTilemap.SetTile(cellCoor, null);
-        bridgesTilemap.RefreshTile(cellCoor);
+        //bridgesTilemap.RefreshTile(cellCoor);
+        bridgetiles.renderTiles(bridgesTilemap, plankCoords);
     }
     public void reverseBridge()
     {

@@ -15,13 +15,13 @@ public class Player : MonoBehaviour {
     public TextMeshProUGUI keyText;
     public int woodCount = 0;
     public int keyCount = 0; 
-    [HideInInspector] public bool isMoving = false;
+    public bool isMoving = false;
 
     public BridgeTiles bridgeTiles;
     private Bridge currentBridge;
     private List<Bridge> bridges;
-    private bool onCooldown = false;
-    private bool onExit = false;
+    public bool onCooldown = false;
+    public bool onExit = false;
     private float moveTime = 0.1f;
 
     //public RuleTile tileBridge;
@@ -29,14 +29,17 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        //We don't show the item counts until we get at least one of them ( then they remain enabled ).
+        woodText.enabled = false;
+        keyText.enabled = false;
         updateKeyText();
         updateWoodText();
         bridges = new List<Bridge>();
-        //characterSprite = GetComponent<Sprite>();
     }
 	
 	// Update is called once per frame
 	void Update () {
+
 
         //We do nothing if the player is still moving.
         if (isMoving || onCooldown || onExit ) return;
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour {
 
     private void Move(int xDir, int yDir)
     {
+
         Vector2 startCell = transform.position;
         Vector2 targetCell = startCell + new Vector2(xDir, yDir);
 
@@ -362,10 +366,14 @@ public class Player : MonoBehaviour {
 
     public void updateWoodText()
     {
+        if (woodCount != 0)
+            woodText.enabled = true;
         woodText.text = "wood:" + woodCount;
     }
     public void updateKeyText()
     {
+        if (woodCount != 0)
+            woodText.enabled = true;
         keyText.text = "keys:" + keyCount;
     }
 
