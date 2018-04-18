@@ -166,7 +166,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.09375
+  orthographic size: 8.46875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3129,7 +3129,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4948948529046156, guid: 1c51435b5dddc814987522d29c1905f2, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4281117593035046, guid: 1c51435b5dddc814987522d29c1905f2, type: 2}
       propertyPath: m_RootOrder
@@ -3212,6 +3212,25 @@ Prefab:
       propertyPath: m_Tiles.Array.data[41].second.m_ColliderType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4948948529046156, guid: 1c51435b5dddc814987522d29c1905f2, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4948948529046156, guid: 1c51435b5dddc814987522d29c1905f2, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212495859398512032, guid: 1c51435b5dddc814987522d29c1905f2,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21301018, guid: 2e4b58c8841357748b874c5f3ddb23c8,
+        type: 3}
+    - target: {fileID: 95196812261278376, guid: 1c51435b5dddc814987522d29c1905f2,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 764c988c1466b4d478ffea4ebb6060a3, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1c51435b5dddc814987522d29c1905f2, type: 2}
   m_IsPrefabParent: 0

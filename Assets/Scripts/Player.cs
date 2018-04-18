@@ -86,47 +86,32 @@ public class Player : MonoBehaviour {
                     StartCoroutine(SmoothMovement(targetCell));
                 else
                     StartCoroutine(BlockedMovement(targetCell));
-
-                /*Collider2D coll = whatsThere(targetCell);
-
-                //If there's a door in front of the character
-                if ( coll != null && coll.tag == "Door" )
-                {
-                    Door door = coll.gameObject.GetComponent<Door>();
-                    //If the door is closed and we can open it
-                    if ( door.IsClosed() && keyCount > 0 )
-                    {
-                        keyCount--; updateKeyText();
-                        door.open();
-                        StartCoroutine(SmoothMovement(targetCell));
-                    }
-                    else if ( !door.IsClosed()) //If it's already opened
-                        StartCoroutine(SmoothMovement(targetCell));
-                    else //If it's closed.
-                        StartCoroutine(BlockedMovement(targetCell));
-                }
-                else
-                    StartCoroutine(SmoothMovement(targetCell)); */
+               
             }
 
             //If the front tile is a bridge plank
             else if (hasBridgeTile)
             {
-                currentBridge = Bridge.belongsTo(bridges, targetCell);
-                Debug.Log(currentBridge);
-                //We verify we are entering the bridge from one of its extremity 
-                if (currentBridge.isExtremity(targetCell))
+                if ( doorCheck(targetCell ))
                 {
-                    //Debug.Log("Entering a bridge!");
-                    // If we are entering the bridge from the start, we reverse end/beginning to handle its treatement more easily.
-                    if (currentBridge.firstPlank().Equals(targetCell))
-                        currentBridge.reverseBridge();
-                    currentBridge.setHasEnd(false);
+                    currentBridge = Bridge.belongsTo(bridges, targetCell);
+                    Debug.Log(currentBridge);
+                    //We verify we are entering the bridge from one of its extremity 
+                    if (currentBridge.isExtremity(targetCell))
+                    {
+                        //Debug.Log("Entering a bridge!");
+                        // If we are entering the bridge from the start, we reverse end/beginning to handle its treatement more easily.
+                        if (currentBridge.firstPlank().Equals(targetCell))
+                            currentBridge.reverseBridge();
+                        currentBridge.setHasEnd(false);
 
-                    StartCoroutine(SmoothMovement(targetCell));
+                        StartCoroutine(SmoothMovement(targetCell));
+                    }
+                    else //otherwise we ignore it.
+                        currentBridge = null;
                 }
-                else //otherwise we ignore it.
-                    currentBridge = null;
+                else
+                    StartCoroutine(BlockedMovement(targetCell));
             }
             //If the player has wood to build a new bridge over the water, he build a bridge and moves there.
             else if (!hasGroundTile && !hasBridgeTile && woodCount > 0 && !hasObstacleTile )
@@ -148,7 +133,7 @@ public class Player : MonoBehaviour {
             if ( hasObstacleTile )
                 StartCoroutine(BlockedMovement(targetCell));
             //If they are leaving the bridge for a walkable ground tile.
-            else if (hasGroundTile && !hasObstacleTile)
+            else if (hasGroundTile)
             {
                 //Debug.Log("Leaving a bridge !");
                 //We check if there's a door where we ends up, and handle it.
@@ -174,20 +159,30 @@ public class Player : MonoBehaviour {
 
             }
             //If they keep walking toward the water, they have wood, and it's the end of the bridge.
-            else if ( !hasGroundTile && !hasBridgeTile && woodCount > 0 && currentBridge.isOnLastPlank(startCell) )
+            else if (  !hasBridgeTile && woodCount > 0 && currentBridge.isOnLastPlank(startCell) )
             {
-                //Debug.Log("adding a plank!");
-                woodCount--; updateWoodText();
-                currentBridge.addPlank(targetCell);
-                StartCoroutine(SmoothMovement(targetCell));
+                if ( doorCheck(targetCell) )
+                {
+                    //Debug.Log("adding a plank!");
+                    woodCount--; updateWoodText();
+                    currentBridge.addPlank(targetCell);
+                    StartCoroutine(SmoothMovement(targetCell));
+                }
+                else
+                    StartCoroutine(BlockedMovement(targetCell));
             }
             //If they are backtracking the bridge
             else if ( currentBridge.playerIsBackTracking(startCell, targetCell) )
             {
-                //Debug.Log("Backtracking!");
-                StartCoroutine(SmoothMovement(targetCell));
-                currentBridge.removeLastPlank();
-                woodCount++; updateWoodText();
+                if (doorCheck(targetCell))
+                {
+                    //Debug.Log("Backtracking!");
+                    StartCoroutine(SmoothMovement(targetCell));
+                    currentBridge.removeLastPlank();
+                    woodCount++; updateWoodText();
+                }
+                else
+                    StartCoroutine(BlockedMovement(targetCell));
             }
 
         }
@@ -366,6 +361,7 @@ public class Player : MonoBehaviour {
         //if there's a levered door in front of the character.
         else if (coll.tag == "LeveredDoor")
         {
+            Debug.Log("LeveredDoor detected!");
             LeveredDoor door = coll.gameObject.GetComponent<LeveredDoor>();
             //If the door is open
             if (door.isOpen)
@@ -402,8 +398,8 @@ public class Player : MonoBehaviour {
             //Debug.Log("You picked up wood ! You have " + woodCount + "piece of woods.");
             coll.gameObject.SetActive(false);
 
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("test").source.Play();
+            /*if (AudioManager.getInstance() != null)
+                AudioManager.getInstance().Find("test").source.Play();*/
         }
         else if ( coll.tag == "Passage" )
         {

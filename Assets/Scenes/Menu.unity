@@ -289,15 +289,6 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 1
-  - first: {x: 9, y: 2, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
   - first: {x: -10, y: 3, z: 0}
     second:
       m_TileIndex: 0
@@ -327,13 +318,13 @@ Tilemap:
       m_ColliderType: 1
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 15
+  - m_RefCount: 14
     m_Data: {fileID: 11400000, guid: 87be769cbfe40264a9752df7091a06fa, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 15
+  - m_RefCount: 14
     m_Data: {fileID: 21300600, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 15
+  - m_RefCount: 14
     m_Data:
       e00: 1
       e01: 0
@@ -352,7 +343,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 15
+  - m_RefCount: 14
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -433,7 +424,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.953125
+  orthographic size: 4.859375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1340,7 +1331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -255.4, y: 140.2}
+  m_AnchoredPosition: {x: -255.4, y: 131}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1390738409
@@ -1362,7 +1353,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "A game by:   \n\t<B>Cawotte</B>  (Programming)\n"
+  m_text: "A game by:   \n\t<B>Cawotte</B>  (Programming, Level & Game \t\t\t\t\t\t
+    Design)\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d62a573c923f5cb47b8ff65261033b90, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: d62a573c923f5cb47b8ff65261033b90, type: 2}
@@ -1407,7 +1399,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 51
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_enableKerning: 1
@@ -1426,15 +1418,15 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 235.90842, y: -8.595757, z: -499.05347, w: -44.34848}
+  m_margin: {x: 235.90842, y: -8.595757, z: -592.34314, w: -53.80208}
   m_textInfo:
     textComponent: {fileID: 1390738409}
-    characterCount: 38
+    characterCount: 66
     spriteCount: 0
-    spaceCount: 10
-    wordCount: 5
+    spaceCount: 21
+    wordCount: 8
     linkCount: 0
-    lineCount: 2
+    lineCount: 3
     pageCount: 1
     materialCount: 1
   m_havePropertiesChanged: 0
@@ -2144,24 +2136,6 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 2
       m_ColliderType: 1
-  - first: {x: 8, y: 2, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 2
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 2
-      m_ColliderType: 1
-  - first: {x: 9, y: 2, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 9
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 2
-      m_ColliderType: 1
   - first: {x: -10, y: 3, z: 0}
     second:
       m_TileIndex: 0
@@ -2229,24 +2203,6 @@ Tilemap:
     second:
       m_TileIndex: 0
       m_TileSpriteIndex: 9
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 2
-      m_ColliderType: 1
-  - first: {x: 8, y: 3, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 2
-      m_ColliderType: 1
-  - first: {x: 9, y: 3, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 7
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -2353,7 +2309,7 @@ Tilemap:
       m_ColliderType: 1
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 59
+  - m_RefCount: 55
     m_Data: {fileID: 11400000, guid: 7b8aed798f6581945a14ac02f93d086c, type: 2}
   - m_RefCount: 3
     m_Data: {fileID: 11400000, guid: 9d4cb9dfb9c0ffc458d317bc99bdde40, type: 2}
@@ -2376,9 +2332,9 @@ Tilemap:
   m_TileSpriteArray:
   - m_RefCount: 3
     m_Data: {fileID: 21300564, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
-  - m_RefCount: 8
+  - m_RefCount: 7
     m_Data: {fileID: 21300512, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
-  - m_RefCount: 8
+  - m_RefCount: 7
     m_Data: {fileID: 21300576, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   - m_RefCount: 7
     m_Data: {fileID: 21300578, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
@@ -2388,11 +2344,11 @@ Tilemap:
     m_Data: {fileID: 21300514, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data: {fileID: 21300516, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 8
+  - m_RefCount: 7
     m_Data: {fileID: 21300580, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: 21300644, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
@@ -2429,7 +2385,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 21300552, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 81
+  - m_RefCount: 77
     m_Data:
       e00: 1
       e01: 0
@@ -2448,7 +2404,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 81
+  - m_RefCount: 77
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -54,6 +54,7 @@ public class AudioManager : MonoBehaviour {
         music.source.clip = musics[num_music].clip;
         music.source.volume = musics[num_music].volume;
         music.source.pitch = musics[num_music].pitch;
+        music.source.loop = true;
         music.source.Play();
 
 	}
