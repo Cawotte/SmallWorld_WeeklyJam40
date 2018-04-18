@@ -82,7 +82,12 @@ public class Player : MonoBehaviour {
             //If the front tile is a walkable ground tile, the player moves here.
             if (hasGroundTile && !hasObstacleTile)
             {
-                Collider2D coll = whatsThere(targetCell);
+                if ( doorCheck(targetCell) )
+                    StartCoroutine(SmoothMovement(targetCell));
+                else
+                    StartCoroutine(BlockedMovement(targetCell));
+
+                /*Collider2D coll = whatsThere(targetCell);
 
                 //If there's a door in front of the character
                 if ( coll != null && coll.tag == "Door" )
@@ -101,7 +106,7 @@ public class Player : MonoBehaviour {
                         StartCoroutine(BlockedMovement(targetCell));
                 }
                 else
-                    StartCoroutine(SmoothMovement(targetCell));
+                    StartCoroutine(SmoothMovement(targetCell)); */
             }
 
             //If the front tile is a bridge plank
@@ -146,20 +151,27 @@ public class Player : MonoBehaviour {
             else if (hasGroundTile && !hasObstacleTile)
             {
                 //Debug.Log("Leaving a bridge !");
-                StartCoroutine(SmoothMovement(targetCell));
-
-                //If we are leaving the last plank of the bridge, we delete it.
-                if ( currentBridge.firstPlank().Equals(startCell))
+                //We check if there's a door where we ends up, and handle it.
+                if ( doorCheck(targetCell) )
                 {
-                    //Debug.Log("Deleting the bridge !");
-                    currentBridge.removeLastPlank();
-                    bridges.Remove(currentBridge);
-                    woodCount++; updateWoodText();
+                    StartCoroutine(SmoothMovement(targetCell));
+
+                    //If we are leaving the last plank of the bridge, we delete it.
+                    if (currentBridge.firstPlank().Equals(startCell))
+                    {
+                        //Debug.Log("Deleting the bridge !");
+                        currentBridge.removeLastPlank();
+                        bridges.Remove(currentBridge);
+                        woodCount++; updateWoodText();
+                    }
+                    else
+                        currentBridge.setHasEnd(true); //The bridge get an end.
+
+                    currentBridge = null;
                 }
                 else
-                    currentBridge.setHasEnd(true); //The bridge get an end.
+                    StartCoroutine(BlockedMovement(targetCell));
 
-                currentBridge = null;
             }
             //If they keep walking toward the water, they have wood, and it's the end of the bridge.
             else if ( !hasGroundTile && !hasBridgeTile && woodCount > 0 && currentBridge.isOnLastPlank(startCell) )
@@ -324,6 +336,33 @@ public class Player : MonoBehaviour {
         }
     }
 
+    //A method that handle doors : Return true if you can move on the tile, false otherwise. 
+    //If the door can be opened, opens it.
+    //TO ADD : Levered Doors.
+    private bool doorCheck(Vector2 targetCell)
+    {
+        Collider2D coll = whatsThere(targetCell);
+
+        //If there's a door in front of the character
+        if (coll != null && coll.tag == "Door")
+        {
+            Door door = coll.gameObject.GetComponent<Door>();
+            //If the door is closed and we can open it
+            if (door.IsClosed() && keyCount > 0)
+            {
+                keyCount--; updateKeyText();
+                door.open();
+                return true;
+            }
+            else if (!door.IsClosed()) //If it's already opened
+                return true;
+            else //If it's closed.
+                return false;
+        }
+        else
+            return true;
+    }
+
     private void OnTriggerEnter2D(Collider2D coll)
     {
         //Debug.Log("Something touched!");
@@ -366,14 +405,14 @@ public class Player : MonoBehaviour {
 
     public void updateWoodText()
     {
-        if (woodCount != 0)
+        if (!woodText.enabled && woodCount != 0)
             woodText.enabled = true;
         woodText.text = "wood:" + woodCount;
     }
     public void updateKeyText()
     {
-        if (woodCount != 0)
-            woodText.enabled = true;
+        if (!keyText.enabled && keyCount != 0)
+            keyText.enabled = true;
         keyText.text = "keys:" + keyCount;
     }
 
