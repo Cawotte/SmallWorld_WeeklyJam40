@@ -343,8 +343,12 @@ public class Player : MonoBehaviour {
     {
         Collider2D coll = whatsThere(targetCell);
 
-        //If there's a door in front of the character
-        if (coll != null && coll.tag == "Door")
+        //No obstacle, we can walk there
+        if (coll == null)
+            return true;
+
+        //If there's a golden door in front of the character
+        if (coll.tag == "Door")
         {
             Door door = coll.gameObject.GetComponent<Door>();
             //If the door is closed and we can open it
@@ -358,6 +362,24 @@ public class Player : MonoBehaviour {
                 return true;
             else //If it's closed.
                 return false;
+        }
+        //if there's a levered door in front of the character.
+        else if (coll.tag == "LeveredDoor")
+        {
+            LeveredDoor door = coll.gameObject.GetComponent<LeveredDoor>();
+            //If the door is open
+            if (door.isOpen)
+                return true;
+            //If the door is close.
+            else
+                return false;
+        }
+        else if (coll.tag == "Lever" )
+        {
+            Lever lever = coll.gameObject.GetComponent<Lever>();
+            lever.operate();
+            //We operate the lever, but can't move there, so we return false;
+            return false;
         }
         else
             return true;
