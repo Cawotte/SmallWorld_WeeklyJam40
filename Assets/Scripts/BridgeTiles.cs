@@ -75,7 +75,7 @@ public class BridgeTiles : ScriptableObject {
     //We compare the direction of the tile before and after the current tile to choose which tile to assign.
     private Sprite midTile(Vector2 dir1, Vector2 dir2)
     {
-        Debug.Log("dir1 = " + dir1 + ", dir2 = " + dir2);
+        //Debug.Log("dir1 = " + dir1 + ", dir2 = " + dir2);
         //We use ( a || b) because the order doesn't matter. It will never be both the same anyway.
         if ( dir1 == Vector2.up || dir2 == Vector2.up )
         {

@@ -24,6 +24,8 @@ public class Player : MonoBehaviour {
     public bool onExit = false;
     private float moveTime = 0.1f;
 
+    private AudioSource walkingSound;
+
     //public RuleTile tileBridge;
 
     // Use this for initialization
@@ -35,6 +37,9 @@ public class Player : MonoBehaviour {
         updateKeyText();
         updateWoodText();
         bridges = new List<Bridge>();
+
+        //Default walking sound is the grass one
+        grassSound();
     }
 	
 	// Update is called once per frame
@@ -83,7 +88,10 @@ public class Player : MonoBehaviour {
             if (hasGroundTile && !hasObstacleTile)
             {
                 if ( doorCheck(targetCell) )
+                {
+                    grassSound();
                     StartCoroutine(SmoothMovement(targetCell));
+                }
                 else
                     StartCoroutine(BlockedMovement(targetCell));
                
@@ -105,6 +113,7 @@ public class Player : MonoBehaviour {
                             currentBridge.reverseBridge();
                         currentBridge.setHasEnd(false);
 
+                        bridgeSound();
                         StartCoroutine(SmoothMovement(targetCell));
                     }
                     else //otherwise we ignore it.
@@ -116,14 +125,21 @@ public class Player : MonoBehaviour {
             //If the player has wood to build a new bridge over the water, he build a bridge and moves there.
             else if (!hasGroundTile && !hasBridgeTile && woodCount > 0 && !hasObstacleTile )
             {
-                //Debug.Log("Building a new bridge !");
-                woodCount--; updateWoodText();
-                currentBridge = new Bridge(bridgesTilemap, bridgeTiles); //We create a new bridge
-                //currentBridge = ScriptableObject.CreateInstance<Bridge>().InitB(bridgeTiles);
-                //currentBridge.initB(bridgeTiles);
-                bridges.Add(currentBridge); //We add it to the bridge list
-                currentBridge.addPlank(targetCell); //We add a plank to the bridge
-                StartCoroutine(SmoothMovement(targetCell)); //We move to this new plank.
+                if (doorCheck(targetCell))
+                {
+                    //Debug.Log("Building a new bridge !");
+                    woodCount--; updateWoodText();
+                    currentBridge = new Bridge(bridgesTilemap, bridgeTiles); //We create a new bridge
+                                                                             //currentBridge = ScriptableObject.CreateInstance<Bridge>().InitB(bridgeTiles);
+                                                                             //currentBridge.initB(bridgeTiles);
+                    bridges.Add(currentBridge); //We add it to the bridge list
+                    currentBridge.addPlank(targetCell); //We add a plank to the bridge
+
+                    bridgeSound();
+                    StartCoroutine(SmoothMovement(targetCell)); //We move to this new plank.
+                }
+                else
+                    StartCoroutine(BlockedMovement(targetCell));
             }
         }
         //If the player starts their movement from a bridge tile
@@ -135,16 +151,17 @@ public class Player : MonoBehaviour {
             //If they are leaving the bridge for a walkable ground tile.
             else if (hasGroundTile)
             {
-                //Debug.Log("Leaving a bridge !");
+                Debug.Log("Leaving a bridge !");
                 //We check if there's a door where we ends up, and handle it.
                 if ( doorCheck(targetCell) )
                 {
+                    grassSound();
                     StartCoroutine(SmoothMovement(targetCell));
 
                     //If we are leaving the last plank of the bridge, we delete it.
                     if (currentBridge.firstPlank().Equals(startCell))
                     {
-                        //Debug.Log("Deleting the bridge !");
+                        Debug.Log("Deleting the bridge !");
                         currentBridge.removeLastPlank();
                         bridges.Remove(currentBridge);
                         woodCount++; updateWoodText();
@@ -163,9 +180,11 @@ public class Player : MonoBehaviour {
             {
                 if ( doorCheck(targetCell) )
                 {
-                    //Debug.Log("adding a plank!");
+                    Debug.Log("adding a plank!");
                     woodCount--; updateWoodText();
                     currentBridge.addPlank(targetCell);
+
+                    bridgeSound();
                     StartCoroutine(SmoothMovement(targetCell));
                 }
                 else
@@ -176,7 +195,9 @@ public class Player : MonoBehaviour {
             {
                 if (doorCheck(targetCell))
                 {
-                    //Debug.Log("Backtracking!");
+                    Debug.Log("Backtracking!");
+
+                    bridgeSound();
                     StartCoroutine(SmoothMovement(targetCell));
                     currentBridge.removeLastPlank();
                     woodCount++; updateWoodText();
@@ -199,6 +220,13 @@ public class Player : MonoBehaviour {
 
         isMoving = true;
 
+        //Play movement sound
+        if ( walkingSound != null )
+        {
+            walkingSound.loop = true;
+            walkingSound.Play();
+        }
+
         float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
         float inverseMoveTime = 1 / moveTime;
 
@@ -211,6 +239,9 @@ public class Player : MonoBehaviour {
             yield return null;
         }
 
+        if (walkingSound != null)
+            walkingSound.loop = false;
+
         isMoving = false;
     }
 
@@ -220,6 +251,10 @@ public class Player : MonoBehaviour {
         //while (isMoving) yield return null;
 
         isMoving = true;
+
+
+        if (AudioManager.getInstance() != null)
+            AudioManager.getInstance().Find("blocked").source.Play();
 
         Vector3 originalPos = transform.position;
 
@@ -398,8 +433,8 @@ public class Player : MonoBehaviour {
             //Debug.Log("You picked up wood ! You have " + woodCount + "piece of woods.");
             coll.gameObject.SetActive(false);
 
-            /*if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("test").source.Play();*/
+            if (AudioManager.getInstance() != null)
+                AudioManager.getInstance().Find("woodpickup").source.Play();
         }
         else if ( coll.tag == "Passage" )
         {
@@ -411,10 +446,23 @@ public class Player : MonoBehaviour {
         }
         else if ( coll.tag == "Key" )
         {
-            Debug.Log("Key picked!");
+            //Debug.Log("Key picked!");
+            if (AudioManager.getInstance() != null)
+                AudioManager.getInstance().Find("keypickup").source.Play();
             keyCount++; updateKeyText();
             coll.gameObject.SetActive(false);
         }
+    }
+
+    public void grassSound()
+    {
+        if (AudioManager.getInstance() != null)
+            walkingSound = AudioManager.getInstance().Find("grass").source;
+    }
+    public void bridgeSound()
+    {
+        if ( AudioManager.getInstance() != null )
+            walkingSound = AudioManager.getInstance().Find("bridge").source;
     }
 
     public Collider2D whatsThere(Vector2 targetPos)
