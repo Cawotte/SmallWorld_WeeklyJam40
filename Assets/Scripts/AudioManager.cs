@@ -33,10 +33,16 @@ public class AudioManager : MonoBehaviour {
             return;
         }
         DontDestroyOnLoad(gameObject);
+        
+        /*
+        if (Screen.fullScreen)
+        {
+            Screen.SetResolution(640, 480, false);
+        } */
 
         //Sound.source is an AudioSource component, it plays the music. For each Sound in sounds[], we
         //initialize there an AudioSource with the value found in the Sound object.
-		foreach (Sound s in sounds)
+        foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
