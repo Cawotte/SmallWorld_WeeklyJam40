@@ -9,6 +9,8 @@ public class Door : MonoBehaviour {
 
     public void open()
     {
+        if (AudioManager.getInstance() != null)
+            AudioManager.getInstance().Find("unlockDoor").source.Play();
         GetComponent<SpriteRenderer>().sprite = openedSprite;
         isClosed = false;
     }

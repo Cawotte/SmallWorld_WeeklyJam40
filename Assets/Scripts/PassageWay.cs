@@ -28,8 +28,13 @@ public class PassageWay : MonoBehaviour {
 
         //We wait for any other movement coroutines to finish before starting this one.
         while (player.isMoving) yield return null;
+
         //we prevent the player from moving while teleporting
         player.isMoving= true;
+
+        //Staircase sound!
+        if (AudioManager.getInstance() != null)
+            AudioManager.getInstance().Find("staircase").source.Play();
 
         Debug.Log("Teleporting from " + name);
 

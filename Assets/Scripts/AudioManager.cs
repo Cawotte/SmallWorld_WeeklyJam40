@@ -57,6 +57,9 @@ public class AudioManager : MonoBehaviour {
         music.source.loop = true;
         music.source.Play();
 
+        //Play ocean sound
+        Find("ocean").source.Play();
+
 	}
     
     //Return the Sound object with the name given. Used by other objets to access the sounds they want to play.

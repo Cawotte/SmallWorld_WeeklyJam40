@@ -31,6 +31,7 @@ public class Lever : MonoBehaviour {
     {
         isPulled = !isPulled;
         renderLever();
+        
 
         foreach ( LeveredDoor door in doorList )
         {

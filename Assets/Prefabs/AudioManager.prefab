@@ -70,10 +70,46 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: victory
+    clip: {fileID: 8300000, guid: 6858e367643ac8240b816d5cbb0af70b, type: 3}
+    volume: 0.5
+    pitch: 1.1
+    loop: 0
+    source: {fileID: 0}
+  - name: blocked
+    clip: {fileID: 8300000, guid: ca3c39c4a2eabb34aa36a16fa51ea90a, type: 3}
+    volume: 0.25
+    pitch: 0.6
+    loop: 0
+    source: {fileID: 0}
+  - name: leverClick
+    clip: {fileID: 8300000, guid: c85e5d9d427719945b7c604c30ab204a, type: 3}
+    volume: 0.5
+    pitch: 1.4
+    loop: 0
+    source: {fileID: 0}
+  - name: ocean
+    clip: {fileID: 8300000, guid: a9e2df0f92aee394d9bf018d70256090, type: 3}
+    volume: 0.15
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
   - name: keypickup
     clip: {fileID: 8300000, guid: b7e1074a38d32684c8d3050ac00c52fc, type: 3}
-    volume: 0.28
-    pitch: 0.63
+    volume: 0.4
+    pitch: 0.9
+    loop: 0
+    source: {fileID: 0}
+  - name: staircase
+    clip: {fileID: 8300000, guid: 62f157168e4f14944a5c063976e5e15f, type: 3}
+    volume: 0.9
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: unlockDoor
+    clip: {fileID: 8300000, guid: 059bc5a20764e0249b50f2a17b57e04d, type: 3}
+    volume: 0.7
+    pitch: 1.3
     loop: 0
     source: {fileID: 0}
   musics:

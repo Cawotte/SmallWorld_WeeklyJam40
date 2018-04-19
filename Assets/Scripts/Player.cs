@@ -281,6 +281,12 @@ public class Player : MonoBehaviour {
             yield return null;
         }
 
+        //The lever disable the sound so its doesn't overlap with this one, so it blocked has been muted, we restore it.
+        if ( AudioManager.getInstance() != null && AudioManager.getInstance().Find("blocked").source.mute )
+        {
+            AudioManager.getInstance().Find("blocked").source.Stop();
+            AudioManager.getInstance().Find("blocked").source.mute = false;
+        }
         isMoving = false;
     }
 
@@ -407,6 +413,13 @@ public class Player : MonoBehaviour {
         }
         else if (coll.tag == "Lever" )
         {
+
+            //Click sound !
+            if (AudioManager.getInstance() != null)
+            {
+                AudioManager.getInstance().Find("leverClick").source.Play();
+                AudioManager.getInstance().Find("blocked").source.mute = true;
+            }
             Lever lever = coll.gameObject.GetComponent<Lever>();
             lever.operate();
             //We operate the lever, but can't move there, so we return false;
@@ -423,8 +436,10 @@ public class Player : MonoBehaviour {
         if ( coll.tag == "Exit")
         {
             Debug.Log("Sortie touché!");
+            if (AudioManager.getInstance() != null)
+                AudioManager.getInstance().Find("victory").source.Play();
             onExit = true; //Prevent the player from moving.
-            Invoke("NextLevel", 0.9f);
+            Invoke("NextLevel", 1f);
             //enabled = false;
         }
         else if ( coll.tag == "Wood")
