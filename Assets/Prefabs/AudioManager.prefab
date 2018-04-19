@@ -72,7 +72,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: victory
     clip: {fileID: 8300000, guid: 6858e367643ac8240b816d5cbb0af70b, type: 3}
-    volume: 0.5
+    volume: 0.36
     pitch: 1.1
     loop: 0
     source: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: keypickup
     clip: {fileID: 8300000, guid: b7e1074a38d32684c8d3050ac00c52fc, type: 3}
-    volume: 0.4
+    volume: 0.6
     pitch: 0.9
     loop: 0
     source: {fileID: 0}

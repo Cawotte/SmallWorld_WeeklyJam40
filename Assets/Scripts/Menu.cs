@@ -15,4 +15,5 @@ public class Menu : MonoBehaviour {
         Debug.Log("Game Quitted !");
         Application.Quit();
     }
+
 }
