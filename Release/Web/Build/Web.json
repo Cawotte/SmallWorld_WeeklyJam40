@@ -1,0 +1,13 @@
+{
+"companyName": "DefaultCompany",
+"productName": "SmallIslands_WeeklyJam40",
+"dataUrl": "Web.data.unityweb",
+"asmCodeUrl": "Web.asm.code.unityweb",
+"asmMemoryUrl": "Web.asm.memory.unityweb",
+"asmFrameworkUrl": "Web.asm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
