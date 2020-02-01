@@ -7,13 +7,9 @@ using UnityEngine.Tilemaps;
 public class Bridge {
 
 
-    public Tilemap bridgesTilemap;
-    //public Sprite bridgeSprite; //= (Sprite)Resources.Load("Sprites/basictiles_8");
-    //public RuleTile tileBridge;
-    public BridgeTiles bridgetiles; 
-
     private bool hasEnd = false;
-    [SerializeField] private List<Vector2> plankCoords = new List<Vector2>();
+
+    [SerializeField] private List<Vector3Int> planks = new List<Vector3Int>();
 
 
     /*  Bridge rules :
@@ -22,39 +18,60 @@ public class Bridge {
      *  
      * 
      * */
-     
-    //Constructors
-    public Bridge(Tilemap bridgesTilemap, BridgeTiles bridgeTiles)
+
+    //Properties
+
+    public bool IsEmpty
     {
-        this.bridgesTilemap = bridgesTilemap;
-        //this.tileBridge = tileBridge;
-        this.bridgetiles = bridgeTiles;
+        get
+        {
+            return planks.Count == 0;
+        }
     }
 
-        /*
-    public Bridge InitB(Tilemap bridgesTilemap)
+    public Vector3Int LastPlank
     {
-        this.bridgesTilemap = bridgesTilemap;
-        plankCoords = new List<Vector2>();
+        get
+        {
+            return planks[planks.Count - 1];
+        }
+    }
+    public Vector3Int BeforeLastPlank
+    {
+        get
+        {
+            return planks[planks.Count - 2];
+        }
+    }
 
-        return this;
-    } */
+    public Vector3Int FirstPlank
+    {
+        get
+        {
+            return planks[0];
+        }
+    }
+
+    public bool HasEnd
+    {
+        get; set;
+    }
+    public List<Vector3Int> Planks { get => planks; }
+
+    //Constructors
+    public Bridge()
+    {
+        this.planks = new List<Vector3Int>();
+    }
 
 
     //Methods
-    public void addPlank(Vector2 plankCoor)
+    public void AddPlank(Vector3Int plankCoor)
     {
-        //Tile bridgeTile = ScriptableObject.CreateInstance<Tile>();
-        //bridgeTile.sprite = bridgeSprite;
 
-        plankCoords.Add(plankCoor);
+        planks.Add(plankCoor);
 
-        /*Vector3Int cellCoor = bridgesTilemap.WorldToCell(plankCoor);
-        bridgesTilemap.SetTile(cellCoor, tileBridge);
-        //bridgesTilemap.RefreshTile(cellCoor);
-        bridgesTilemap.RefreshAllTiles(); */
-
-        bridgetiles.renderTiles(bridgesTilemap, plankCoords);
+       //Render  bridgetiles.renderTiles(bridgesTilemap, planks);
 
     }
     
@@ -62,17 +79,17 @@ public class Bridge {
     {
         if (hasEnd) hasEnd = false;
 
-        Vector2 removedCoor = lastPlank();
-        plankCoords.RemoveAt(plankCoords.Count - 1);
+        Vector2Int removedCoor = lastPlank();
+        planks.RemoveAt(planks.Count - 1);
 
         Vector3Int cellCoor = bridgesTilemap.WorldToCell(removedCoor);
         bridgesTilemap.SetTile(cellCoor, null);
         //bridgesTilemap.RefreshTile(cellCoor);
-        bridgetiles.renderTiles(bridgesTilemap, plankCoords);
+        bridgetiles.renderTiles(bridgesTilemap, planks);
     }
     public void reverseBridge()
     {
-        plankCoords.Reverse();
+        planks.Reverse();
     }
 
     //Booleans
@@ -107,10 +124,10 @@ public class Bridge {
     public bool playerIsBackTracking(Vector2 playerPos, Vector2 targetPos)
     {
         //If both coordinates belongs to the bridge
-        if (contains(playerPos) && contains(targetPos))
+        if (Contains(playerPos) && Contains(targetPos))
         {
             //If there's only one plank left.
-            if (plankCoords.Count == 1)
+            if (planks.Count == 1)
                 return playerPos.Equals(lastPlank());
             //Else if the player is moving from last Plank to plank before last.
             return (playerPos.Equals(lastPlank()) && targetPos.Equals(beforeLastPlank()));
@@ -119,60 +136,11 @@ public class Bridge {
             return false;
     }
 
-    public bool contains(Vector2 plankPos)
+    public bool Contains(Vector3Int plankPos)
     {
-        return plankCoords.Contains(plankPos);
+        return planks.Contains(plankPos);
     }
     
-    public bool isEmpty()
-    {
-        return plankCoords.Count == 0;
-    }
-
-    //Static methods
-
-    //Return the bridge in the given list containing the given position. If there is none, return null.
-    public static Bridge belongsTo(List<Bridge> bridgeList, Vector2 PlankPos)
-    {
-        foreach (Bridge bridge in bridgeList)
-        {
-            foreach (Vector2 pos in bridge.plankCoords)
-            {
-                //Debug.Log("Pos =" + pos.ToString());
-                if (Vector2.Distance(pos, PlankPos) <= float.Epsilon )
-                    return bridge;
-            }
-            //if (bridge.contains(PlankPos))
-               /// return bridge;
-            
-        }
-
-        Debug.Log("Coor not found : " + PlankPos.ToString());
-
-        return null;
-    }
-
-    //Getters - Setters
-    public Vector2 lastPlank()
-    {
-        return plankCoords[plankCoords.Count - 1];
-    }
-    public Vector2 beforeLastPlank()
-    {
-        return plankCoords[plankCoords.Count - 2];
-    }
-    public Vector2 firstPlank()
-    {
-        return plankCoords[0];
-    }
-    public void setHasEnd(bool boolean)
-    {
-        hasEnd = boolean;
-    }
-    public bool hasAnEnd()
-    {
-        return hasEnd;
-    }
 
 
 

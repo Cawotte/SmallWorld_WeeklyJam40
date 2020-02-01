@@ -8,18 +8,18 @@ using TMPro;
 
 public class Player : MonoBehaviour {
 
-    public Tilemap groundTilemap;
-    public Tilemap obstaclesTilemap;
-    public Tilemap bridgesTilemap;
+
+    [Header("References")]
+
+    [SerializeField]
+    private Map map;
+
     public TextMeshProUGUI woodText;
     public TextMeshProUGUI keyText;
     public int woodCount = 0;
     public int keyCount = 0; 
     public bool isMoving = false;
 
-    public BridgeTiles bridgeTiles;
-    private Bridge currentBridge;
-    private List<Bridge> bridges;
     public bool onCooldown = false;
     public bool onExit = false;
     private float moveTime = 0.1f;
@@ -72,13 +72,14 @@ public class Player : MonoBehaviour {
     {
 
         Vector2 startCell = transform.position;
-        Vector2 targetCell = startCell + new Vector2(xDir, yDir);
+        Vector2 targetCell = startCell + new Vector2(xDir, yDir).normalized;
 
-        bool isOnGround = getCell(groundTilemap, startCell) != null; //If the player is on the ground
-        bool isOnBridge = getCell(bridgesTilemap, startCell) != null; //If the player is on a bridge
-        bool hasGroundTile = getCell(groundTilemap, targetCell) != null; //If target Tile has a ground
-        bool hasObstacleTile = getCell(obstaclesTilemap, targetCell) != null; //if target Tile has an obstacle
-        bool hasBridgeTile = getCell(bridgesTilemap, targetCell) != null; //if target Tile has a bridge (plank)
+        bool isOnGround = map.IsGround(startCell); //If the player is on the ground
+        bool isOnBridge = map.IsBridge(startCell); //If the player is on a bridge
+
+        bool hasGroundTile = map.IsGround(targetCell); //If target Tile has a ground
+        bool hasObstacleTile = map.IsObstacle(targetCell); //if target Tile has an obstacle
+        bool hasBridgeTile = map.IsBridge(targetCell); //if target Tile has a bridge (plank)
 
         //If the player starts their movement from a ground tile.
         if (isOnGround)
@@ -504,15 +505,6 @@ public class Player : MonoBehaviour {
     private void NextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
-    }
-
-    private TileBase getCell(Tilemap tilemap, Vector2 cellWorldPos)
-    {
-        return tilemap.GetTile(tilemap.WorldToCell(cellWorldPos));
-    }
-    private bool hasTile(Tilemap tilemap, Vector2 cellWorldPos)
-    {
-        return tilemap.HasTile(tilemap.WorldToCell(cellWorldPos));
     }
 
 }

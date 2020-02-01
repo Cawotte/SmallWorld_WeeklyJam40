@@ -18,25 +18,27 @@ public class BridgeTiles : ScriptableObject {
     public Sprite corner3;
     public Sprite corner4;
 
-    public void renderTiles(Tilemap bridgesTilemap, List<Vector2> plankCoords) 
+    public void RenderBridge(Tilemap bridgesTilemap, Bridge bridge) 
     {
         Tile bridgeTile;
         Vector3Int cellCoor;
-        Vector2 direction;
-        Vector2 direction2;
+        Vector3Int direction;
+        Vector3Int direction2;
+
+        List<Vector3Int> planks = bridge.Planks;
         
 
-        if ( plankCoords.Count == 1 )
+        if ( planks.Count == 1 )
         {
             bridgeTile = ScriptableObject.CreateInstance<Tile>();
             bridgeTile.sprite = defaultSprite;
 
-            cellCoor = bridgesTilemap.WorldToCell(plankCoords[0]);
+            cellCoor = bridgesTilemap.WorldToCell(planks[0]);
             bridgesTilemap.SetTile(cellCoor, bridgeTile);
         }
         else
         {
-            for ( int i = 0; i < plankCoords.Count; i++)
+            for ( int i = 0; i < planks.Count; i++)
             {
 
                 bridgeTile = ScriptableObject.CreateInstance<Tile>();
@@ -44,26 +46,26 @@ public class BridgeTiles : ScriptableObject {
                 //First plank rendering
                 if (i == 0)
                 {
-                    direction = plankCoords[1] - plankCoords[0];
+                    direction = planks[1] - planks[0];
                     //Debug.Log("i = 0; Dir = " + direction);
-                    bridgeTile.sprite = firstTile(direction);
+                    bridgeTile.sprite = FirstTile(direction);
                 }
                 //Last plank rendering
-                else if (i == plankCoords.Count - 1)
+                else if (i == planks.Count - 1)
                 {
-                    direction = plankCoords[plankCoords.Count - 1] - plankCoords[plankCoords.Count - 2];
+                    direction = planks[planks.Count - 1] - planks[planks.Count - 2];
                     //Debug.Log("i = last; Dir = " + direction);
-                    bridgeTile.sprite = endTile(direction);
+                    bridgeTile.sprite = EndTile(direction);
                 }
                 //Mid planks renderings.
                 else
                 {
-                    direction = plankCoords[i] - plankCoords[i - 1];
-                    direction2 = plankCoords[i] - plankCoords[i + 1];
-                    bridgeTile.sprite = midTile(direction, direction2);
+                    direction = planks[i] - planks[i - 1];
+                    direction2 = planks[i] - planks[i + 1];
+                    bridgeTile.sprite = MidTile(direction, direction2);
                 }
 
-                cellCoor = bridgesTilemap.WorldToCell(plankCoords[i]);
+                cellCoor = bridgesTilemap.WorldToCell(planks[i]);
                 bridgesTilemap.SetTile(cellCoor, bridgeTile);
             }
         }
@@ -73,58 +75,58 @@ public class BridgeTiles : ScriptableObject {
     }
 
     //We compare the direction of the tile before and after the current tile to choose which tile to assign.
-    private Sprite midTile(Vector2 dir1, Vector2 dir2)
+    private Sprite MidTile(Vector3Int dir1, Vector3Int dir2)
     {
         //Debug.Log("dir1 = " + dir1 + ", dir2 = " + dir2);
         //We use ( a || b) because the order doesn't matter. It will never be both the same anyway.
-        if ( dir1 == Vector2.up || dir2 == Vector2.up )
+        if ( dir1 == Vector3Int.up || dir2 == Vector3Int.up )
         {
-            if (dir1 == Vector2.down || dir2 == Vector2.down)
+            if (dir1 == Vector3Int.down || dir2 == Vector3Int.down)
                 return vertical;
-            else if (dir1 == Vector2.left || dir2 == Vector2.left)
+            else if (dir1 == Vector3Int.left || dir2 == Vector3Int.left)
                 return corner1;
-            else if (dir1 == Vector2.right || dir2 == Vector2.right)
+            else if (dir1 == Vector3Int.right || dir2 == Vector3Int.right)
                 return corner2;
         }
-        else if (dir1 == Vector2.left || dir2 == Vector2.left)
+        else if (dir1 == Vector3Int.left || dir2 == Vector3Int.left)
         {
-            if (dir1 == Vector2.right || dir2 == Vector2.right)
+            if (dir1 == Vector3Int.right || dir2 == Vector3Int.right)
                 return horizontal;
-            else if (dir1 == Vector2.down || dir2 == Vector2.down)
+            else if (dir1 == Vector3Int.down || dir2 == Vector3Int.down)
                 return corner4;
         }
-        else if (dir1 == Vector2.right || dir2 == Vector2.right)
+        else if (dir1 == Vector3Int.right || dir2 == Vector3Int.right)
         {
-            if (dir1 == Vector2.down || dir2 == Vector2.down)
+            if (dir1 == Vector3Int.down || dir2 == Vector3Int.down)
                 return corner3;
         }
 
         return defaultSprite;
     }
     
-    private Sprite endTile(Vector2 direction)
+    private Sprite EndTile(Vector3Int direction)
     {
-        if (direction == Vector2.up)
+        if (direction == Vector3Int.up)
             return topEnd;
-        else if (direction == Vector2.down)
+        else if (direction == Vector3Int.down)
             return bottomEnd;
-        else if (direction == Vector2.left)
+        else if (direction == Vector3Int.left)
             return leftEnd;
-        else if (direction == Vector2.right)
+        else if (direction == Vector3Int.right)
             return rightEnd;
         else
             return defaultSprite;
     }
 
-    private Sprite firstTile(Vector2 direction)
+    private Sprite FirstTile(Vector3Int direction)
     {
-        if (direction == Vector2.up)
+        if (direction == Vector3Int.up)
             return bottomEnd;
-        else if (direction == Vector2.down)
+        else if (direction == Vector3Int.down)
             return topEnd;
-        else if (direction == Vector2.left)
+        else if (direction == Vector3Int.left)
             return rightEnd;
-        else if (direction == Vector2.right)
+        else if (direction == Vector3Int.right)
             return leftEnd;
         else
             return defaultSprite;
