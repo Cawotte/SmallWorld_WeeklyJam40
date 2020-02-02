@@ -2,41 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lever : MonoBehaviour {
+public class Lever : Interactable {
 
-    public bool isPulled;
-    public List<LeveredDoor> doorList;
+    [SerializeField]
+    private bool isSwitchedOn = false;
 
-    public Sprite leverOn;
-    public Sprite leverOff;
+    [SerializeField]
+    private List<LeveredDoor> doorList;
+
+    [SerializeField]
+    private Sprite switchedOnSprite;
+
+    [SerializeField]
+    private Sprite switchedOffSprite;
+
 
     // Use this for initialization
     void Start () {
 
-        //The lever can start either pulled or not depending on the bool value we set in the inspector.
-        renderLever();
+        UpdateSprite();
 
     }
 
-    private void renderLever()
+    public override bool CanMoveTo(Player player)
     {
-        if (isPulled)
-            GetComponent<SpriteRenderer>().sprite = leverOn;
-        else
-            GetComponent<SpriteRenderer>().sprite = leverOff;
+        SwitchLever(); //Switch the lever, then return false because a lever is an obstacle.
+        return false;
     }
-	
-    //Change the state of each door the lever operate ones.
-	public void operate()
-    {
-        isPulled = !isPulled;
-        renderLever();
-        
 
-        foreach ( LeveredDoor door in doorList )
+    public void SwitchLever()
+    {
+        isSwitchedOn = !isSwitchedOn;
+
+        UpdateSprite();
+
+        //Switch levers
+        foreach (LeveredDoor door in doorList)
         {
-            door.openClose();
+            door.SwitchOpenClose();
+        }
+
+
+        //Click sound !
+        if (AudioManager.getInstance() != null)
+        {
+            AudioManager.getInstance().Find("leverClick").source.Play();
+            AudioManager.getInstance().Find("blocked").source.mute = true;
         }
 
     }
+
+    private void UpdateSprite()
+    {
+
+        if (isSwitchedOn)
+            GetComponent<SpriteRenderer>().sprite = switchedOnSprite;
+        else
+            GetComponent<SpriteRenderer>().sprite = switchedOffSprite;
+    }
+
 }

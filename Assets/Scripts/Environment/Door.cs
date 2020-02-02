@@ -1,23 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class Door : MonoBehaviour {
+public abstract class Door : Interactable {
 
-    public Sprite openedSprite;
-    private bool isClosed = true;
+    [SerializeField]
+    private Sprite openedSprite;
+    [SerializeField]
+    private Sprite closedSprite;
 
-    public void open()
-    {
-        if (AudioManager.getInstance() != null)
-            AudioManager.getInstance().Find("unlockDoor").source.Play();
-        GetComponent<SpriteRenderer>().sprite = openedSprite;
-        isClosed = false;
+
+    [SerializeField]
+    protected bool isOpen = false;
+
+    public bool IsOpen {
+        get => isOpen;
+        protected set
+        {
+            if (isOpen != value)
+            {
+                UpdateSprite();
+            }
+
+            isOpen = value;
+        }
     }
 
-    public bool IsClosed()
+    public void OnValidate()
     {
-        return isClosed;
+        UpdateSprite();
     }
+    public void Start()
+    {
+        UpdateSprite();
+    }
+
+    public override bool CanMoveTo(Player player)
+    {
+        return isOpen;
+    }
+
+
+    private void UpdateSprite()
+    {
+
+        if (isOpen)
+            GetComponent<SpriteRenderer>().sprite = openedSprite;
+        else
+            GetComponent<SpriteRenderer>().sprite = closedSprite;
+    }
+
 
 }

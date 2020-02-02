@@ -14,7 +14,7 @@ public class BridgeBuilder
 
     //Current bridge the player is on
     [SerializeField]
-    private Bridge currentBridge;
+    private Bridge currentBridge = null;
 
     private Tilemap bridgeTilemap;
 
@@ -27,43 +27,81 @@ public class BridgeBuilder
     }
 
     public Bridge CurrentBridge { get => currentBridge; }
+    public Tilemap BridgeTilemap { set => bridgeTilemap = value; }
 
-    public BridgeBuilder(Tilemap bridgeTilemap)
+    public void StartNewBridge(Vector3 worldPos)
     {
-        this.bridgeTilemap = bridgeTilemap;
-    }
-
-    public void ExitCurrentBridge()
-    {
-
-    }
-
-    public bool StartNewBridge(Vector3 worldPos)
-    {
+        /*
+        currentBridge
         if (HasBridge(worldPos) || currentBridge != null)
         {
             //Already has a bridge
             return false;
-        }
+        } */
 
         currentBridge = new Bridge();
+        bridges.Add(currentBridge);
+        AddPlank(worldPos);
+
     }
 
+    public void ExitCurrentBridge()
+    {
+        currentBridge = null;
+    }
 
     public void AddPlank(Vector3 worldPos)
     {
-
+        AddPlank(currentBridge, worldPos);
     }
+
 
     public void RemovePlank(Vector3 worldPos)
     {
-
+        RemovePlank(currentBridge, worldPos);
     }
 
-    private bool HasBridge(Vector3 worldPos)
+    public void SetTargetBridgeAsCurrent(Vector3 worldPos)
     {
-        return bridgeTilemap.HasTile(bridgeTilemap.layoutGrid.WorldToCell(worldPos));
+        currentBridge = GetBridgeAt(worldPos);
     }
+
+    public bool ArePlanksOnSameBridge(Vector3 worldPos1, Vector3 worldPos2)
+    {
+        Bridge bridge = GetBridgeAt(worldPos1);
+
+        if (bridge != null)
+        {
+            return bridge.Equals(GetBridgeAt(worldPos2));
+        }
+
+        return false;
+    }
+
+    #region Private Methods
+
+    private void AddPlank(Bridge bridge, Vector3 worldPos)
+    {
+        bridge.AddPlank(WorldToCell(worldPos));
+        RenderBridge(bridge);
+    }
+
+
+    private void RemovePlank(Bridge bridge, Vector3 worldPos)
+    {
+        Vector3Int plankCell = WorldToCell(worldPos);
+
+        bridge.RemovePlank(plankCell);
+
+        bridgeTilemap.SetTile(plankCell, null); //set tile empty
+        RenderBridge(bridge);
+
+        if (bridge.IsEmpty)
+        {
+            bridges.Remove(bridge);
+        }
+    }
+
 
     private Bridge GetBridgeAt(Vector3 worldPos)
     {
@@ -71,7 +109,7 @@ public class BridgeBuilder
         {
 
             //TODO : BETTER
-            if (bridge.Contains(worldPos))
+            if (bridge.Contains(WorldToCell(worldPos)))
             {
                 return bridge;
             }
@@ -92,4 +130,6 @@ public class BridgeBuilder
     {
         bridgeTiles.RenderBridge(bridgeTilemap, bridge);
     }
+
+    #endregion
 }

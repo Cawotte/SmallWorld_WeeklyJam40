@@ -36,7 +36,6 @@ public class Player : MonoBehaviour {
         keyText.enabled = false;
         updateKeyText();
         updateWoodText();
-        bridges = new List<Bridge>();
 
         //Default walking sound is the grass one
         grassSound();
@@ -71,16 +70,39 @@ public class Player : MonoBehaviour {
     private void Move(int xDir, int yDir)
     {
 
-        Vector2 startCell = transform.position;
-        Vector2 targetCell = startCell + new Vector2(xDir, yDir).normalized;
 
-        bool isOnGround = map.IsGround(startCell); //If the player is on the ground
-        bool isOnBridge = map.IsBridge(startCell); //If the player is on a bridge
+        Vector2 startPos = transform.position;
+        Vector2 endPos = startPos + new Vector2(xDir, yDir).normalized;
 
-        bool hasGroundTile = map.IsGround(targetCell); //If target Tile has a ground
-        bool hasObstacleTile = map.IsObstacle(targetCell); //if target Tile has an obstacle
-        bool hasBridgeTile = map.IsBridge(targetCell); //if target Tile has a bridge (plank)
+        
+        bool isOnGround = map.IsGround(startPos); //If the player is on the ground
+        bool isOnBridge = map.IsBridge(startPos); //If the player is on a bridge
 
+        bool hasGroundTile = map.IsGround(endPos); //If target Tile has a ground
+        bool hasObstacleTile = map.IsObstacle(endPos); //if target Tile has an obstacle
+        bool hasBridgeTile = map.IsBridge(endPos); //if target Tile has a bridge (plank)
+
+
+        bool canWalk = map.CanMoveFromTo(this, transform.position, endPos);
+
+        if (canWalk)
+        {
+            if (hasBridgeTile)
+            {
+                bridgeSound();
+            } else
+            {
+                grassSound();
+            }
+
+            StartCoroutine(SmoothMovement(endPos));
+        }
+        else
+        {
+
+            StartCoroutine(BlockedMovement(endPos));
+        }
+        /*
         //If the player starts their movement from a ground tile.
         if (isOnGround)
         {
@@ -211,7 +233,7 @@ public class Player : MonoBehaviour {
 
         if (!isMoving)
             StartCoroutine(BlockedMovement(targetCell));
-
+        */
         
     }
 
@@ -373,62 +395,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    //A method that handle doors : Return true if you can move on the tile, false otherwise. 
-    //If the door can be opened, opens it.
-    //TO ADD : Levered Doors.
-    private bool doorCheck(Vector2 targetCell)
-    {
-        Collider2D coll = whatsThere(targetCell);
-
-        //No obstacle, we can walk there
-        if (coll == null)
-            return true;
-
-        //If there's a golden door in front of the character
-        if (coll.tag == "Door")
-        {
-            Door door = coll.gameObject.GetComponent<Door>();
-            //If the door is closed and we can open it
-            if (door.IsClosed() && keyCount > 0)
-            {
-                keyCount--; updateKeyText();
-                door.open();
-                return true;
-            }
-            else if (!door.IsClosed()) //If it's already opened
-                return true;
-            else //If it's closed.
-                return false;
-        }
-        //if there's a levered door in front of the character.
-        else if (coll.tag == "LeveredDoor")
-        {
-            Debug.Log("LeveredDoor detected!");
-            LeveredDoor door = coll.gameObject.GetComponent<LeveredDoor>();
-            //If the door is open
-            if (door.isOpen)
-                return true;
-            //If the door is close.
-            else
-                return false;
-        }
-        else if (coll.tag == "Lever" )
-        {
-
-            //Click sound !
-            if (AudioManager.getInstance() != null)
-            {
-                AudioManager.getInstance().Find("leverClick").source.Play();
-                AudioManager.getInstance().Find("blocked").source.mute = true;
-            }
-            Lever lever = coll.gameObject.GetComponent<Lever>();
-            lever.operate();
-            //We operate the lever, but can't move there, so we return false;
-            return false;
-        }
-        else
-            return true;
-    }
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
@@ -481,12 +447,6 @@ public class Player : MonoBehaviour {
             walkingSound = AudioManager.getInstance().Find("bridge").source;
     }
 
-    public Collider2D whatsThere(Vector2 targetPos)
-    {
-        RaycastHit2D hit;
-        hit = Physics2D.Linecast(targetPos, targetPos);
-        return hit.collider;
-    }
 
     public void updateWoodText()
     {

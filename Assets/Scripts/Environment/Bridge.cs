@@ -36,26 +36,16 @@ public class Bridge {
             return planks[planks.Count - 1];
         }
     }
-    public Vector3Int BeforeLastPlank
+
+
+    public int Size
     {
         get
         {
-            return planks[planks.Count - 2];
+            return planks.Count;
         }
     }
 
-    public Vector3Int FirstPlank
-    {
-        get
-        {
-            return planks[0];
-        }
-    }
-
-    public bool HasEnd
-    {
-        get; set;
-    }
     public List<Vector3Int> Planks { get => planks; }
 
     //Constructors
@@ -74,67 +64,29 @@ public class Bridge {
        //Render  bridgetiles.renderTiles(bridgesTilemap, planks);
 
     }
+
+    public void RemovePlank(Vector3Int plankCell)
+    {
+        planks.Remove(plankCell);
+    }
     
-    public void removeLastPlank()
+    public bool RemoveLastPlank()
     {
         if (hasEnd) hasEnd = false;
 
-        Vector2Int removedCoor = lastPlank();
+        Vector3Int plankCell = LastPlank;
+        //Vector3Int plankCell = bridgesTilemap.WorldToCell(removedCoor);
+
         planks.RemoveAt(planks.Count - 1);
 
-        Vector3Int cellCoor = bridgesTilemap.WorldToCell(removedCoor);
-        bridgesTilemap.SetTile(cellCoor, null);
+        //bridgesTilemap.SetTile(plankCell, null);
         //bridgesTilemap.RefreshTile(cellCoor);
-        bridgetiles.renderTiles(bridgesTilemap, planks);
-    }
-    public void reverseBridge()
-    {
-        planks.Reverse();
-    }
+        //bridgetiles.renderTiles(bridgesTilemap, planks);
 
-    //Booleans
-
-    //Return true if PlayerPos = lastPlank pos.
-    public bool isOnLastPlank(Vector2 playerPos)
-    {
-        return lastPlank().Equals(playerPos);
+        //True if empty
+        return (planks.Count == 0);
     }
 
-    public bool canRemovePlank(Vector2 playerPos, Vector2 plankPos)
-    {
-        //A plank can be removed if
-
-        //it's the first plank and the bridge has an end.
-        if ( plankPos.Equals(firstPlank()) && !hasEnd )
-            return true;
-        //it's the last plank and the player is leaving it.
-        if (plankPos.Equals(lastPlank()) && playerPos.Equals(lastPlank()))
-            return true;
-
-        return false;
-    }
-
-    public bool isExtremity(Vector2 posCell)
-    {
-        return (posCell.Equals(lastPlank()) || posCell.Equals(firstPlank()));
-    }
-
- 
-    //return true if the player is leaving the last plank for the one before the last.
-    public bool playerIsBackTracking(Vector2 playerPos, Vector2 targetPos)
-    {
-        //If both coordinates belongs to the bridge
-        if (Contains(playerPos) && Contains(targetPos))
-        {
-            //If there's only one plank left.
-            if (planks.Count == 1)
-                return playerPos.Equals(lastPlank());
-            //Else if the player is moving from last Plank to plank before last.
-            return (playerPos.Equals(lastPlank()) && targetPos.Equals(beforeLastPlank()));
-        }
-        else
-            return false;
-    }
 
     public bool Contains(Vector3Int plankPos)
     {
