@@ -8,13 +8,13 @@ public class Lever : Interactable {
     private bool isSwitchedOn = false;
 
     [SerializeField]
-    private List<LeveredDoor> doorList;
+    private List<LeveredDoor> doorList = new List<LeveredDoor>();
 
     [SerializeField]
-    private Sprite switchedOnSprite;
+    private Sprite switchedOnSprite = null;
 
     [SerializeField]
-    private Sprite switchedOffSprite;
+    private Sprite switchedOffSprite = null;
 
 
     private void OnValidate()

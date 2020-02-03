@@ -13,8 +13,7 @@ public class Key : MonoBehaviour
             if (AudioManager.getInstance() != null)
                 AudioManager.getInstance().Find("keypickup").source.Play();
 
-            player.keyCount++; 
-            player.updateKeyText();
+            player.KeyCount++;
 
             Destroy(gameObject);
         }

@@ -12,12 +12,18 @@ public class Player : MonoBehaviour {
     [Header("References")]
 
     [SerializeField]
-    private Map map;
+    private Map map = null;
 
-    public TextMeshProUGUI woodText;
-    public TextMeshProUGUI keyText;
-    public int woodCount = 0;
-    public int keyCount = 0; 
+    [Header("ScriptableObject Variables")]
+    [SerializeField]
+    private IntVariable woodCount = null;
+
+    [SerializeField]
+    private IntVariable keyCount = null;
+
+
+    [Header("Player Info")]
+
     public bool isMoving = false;
 
     public bool onCooldown = false;
@@ -26,16 +32,34 @@ public class Player : MonoBehaviour {
 
     private AudioSource walkingSound;
 
+    public int WoodCount
+    {
+        get
+        {
+            return woodCount.Value;
+        }
+        set
+        {
+            woodCount.Value = value;
+        }
+    }
+
+    public int KeyCount
+    {
+        get
+        {
+            return keyCount.Value;
+        }
+        set
+        {
+            keyCount.Value = value;
+        }
+    }
+
     //public RuleTile tileBridge;
 
     // Use this for initialization
     void Start () {
-
-        //We don't show the item counts until we get at least one of them ( then they remain enabled ).
-        woodText.enabled = false;
-        keyText.enabled = false;
-        updateKeyText();
-        updateWoodText();
 
         //Default walking sound is the grass one
         grassSound();
@@ -204,20 +228,6 @@ public class Player : MonoBehaviour {
     {
         if ( AudioManager.getInstance() != null )
             walkingSound = AudioManager.getInstance().Find("bridge").source;
-    }
-
-
-    public void updateWoodText()
-    {
-        if (!woodText.enabled && woodCount != 0)
-            woodText.enabled = true;
-        woodText.text = "wood:" + woodCount;
-    }
-    public void updateKeyText()
-    {
-        if (!keyText.enabled && keyCount != 0)
-            keyText.enabled = true;
-        keyText.text = "keys:" + keyCount;
     }
 
 

@@ -8,16 +8,16 @@ public class Map : MonoBehaviour
     private Grid grid;
 
     [SerializeField]
-    private Tilemap groundTilemap;
+    private Tilemap groundTilemap = null;
 
     [SerializeField]
-    private Tilemap obstaclesTilemap;
+    private Tilemap obstaclesTilemap = null;
 
     [SerializeField]
-    private Tilemap bridgesTilemap;
+    private Tilemap bridgesTilemap = null;
 
     [SerializeField]
-    private BridgeBuilder bridgeBuilder;
+    private BridgeBuilder bridgeBuilder = null;
 
     public BridgeBuilder BridgeBuilder { get => bridgeBuilder; }
 
@@ -57,25 +57,14 @@ public class Map : MonoBehaviour
         //Is it an adjacent cell ?
         if ((cellStartPos - cellStartPos).magnitude > 1f)
         {
-            Debug.Log("Can't move, not adjacent tiles");
             return false;
         }
 
         //Is it an obstacle ?
         if (IsObstacle(endPos))
         {
-            Debug.Log("Can't move, obstacle");
             return false;
         }
-
-        /**
-         *  We need to test two conditions, If the player can move to the next tile :
-         *      - Considering bridges
-         *      - Considering interactables
-         *      
-         *  Because the player can't move despite bridge if a door is locked, 
-         *  and can't move despite an unlocked door if it can bridge over water.s
-         */
 
 
         // --- INTERACTABLE
@@ -95,7 +84,7 @@ public class Map : MonoBehaviour
 
         // --- BRIDGE
 
-        bool playerCanBuildBridge = player.woodCount > 0;
+        bool playerCanBuildBridge = player.WoodCount > 0;
         bool playerIsOnGround = IsGround(startPos);
 
         bool endHasWater = IsWater(endPos);
@@ -126,21 +115,6 @@ public class Map : MonoBehaviour
                         //Are we on an extremity of the bridge ?
                         if (bridgeBuilder.IsAnExtremityOfCurrentBridge(startPos))
                         {
-                            /*
-                            Bridge currentBridge = bridgeBuilder.CurrentBridge;
-
-                            if (currentBridge.Size <= 1)
-                            {
-                                bridgeBuilder.AddPlank(endPos);
-                            }
-                            else
-                            {
-                                //Verify to which end add the plank.
-                                Vector3Int playerCell = grid.WorldToCell(startPos);
-
-                            }
-                            if (bridgeBuilder.CurrentBridge.LastPlank.Equals) */
-                                //continue current bridge
                             bridgeBuilder.AddPlank(endPos, startPos);
                         }
                         else
@@ -150,7 +124,7 @@ public class Map : MonoBehaviour
                         }
                     }
 
-                    player.woodCount--;
+                    player.WoodCount--;
 
                     return true;
                 }
@@ -177,7 +151,7 @@ public class Map : MonoBehaviour
                         bridgeBuilder.ArePlanksConsecutive(startPos, endPos))
                     {
                         bridgeBuilder.RemovePlank(startPos); //remove behind ourselves.
-                        player.woodCount++;
+                        player.WoodCount++;
                         return true;
                     }
 
@@ -217,7 +191,7 @@ public class Map : MonoBehaviour
             if (bridgeBuilder.CurrentBridge.Size == 1)
             {
                 bridgeBuilder.RemovePlank(startPos);
-                player.woodCount++;
+                player.WoodCount++;
             }
             else
             {

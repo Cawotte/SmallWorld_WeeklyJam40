@@ -6,9 +6,9 @@ using UnityEngine;
 public abstract class Door : Interactable {
 
     [SerializeField]
-    private Sprite openedSprite;
+    private Sprite openedSprite = null;
     [SerializeField]
-    private Sprite closedSprite;
+    private Sprite closedSprite = null;
 
 
     [SerializeField]

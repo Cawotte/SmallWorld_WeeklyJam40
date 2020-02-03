@@ -34,7 +34,7 @@ public class AudioManager : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
         
-        
+        //WHAT ?
         Screen.SetResolution(1280, 600, false);
 
         //Sound.source is an AudioSource component, it plays the music. For each Sound in sounds[], we

@@ -12,8 +12,7 @@ public class Wood : MonoBehaviour
             if (AudioManager.getInstance() != null)
                 AudioManager.getInstance().Find("woodpickup").source.Play();
 
-            player.woodCount++; 
-            player.updateWoodText();
+            player.WoodCount++; 
 
             Destroy(gameObject);
         }

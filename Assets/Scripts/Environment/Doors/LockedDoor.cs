@@ -14,10 +14,10 @@ public class LockedDoor : Door
         }
         else
         {
-            if (player.keyCount > 0)
+            if (player.KeyCount > 0)
             {
                 Unlock();
-                player.keyCount--;
+                player.KeyCount--;
                 return true;
             }
 
