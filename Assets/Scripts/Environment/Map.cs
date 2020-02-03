@@ -5,7 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField]
     private Grid grid;
 
     [SerializeField]
@@ -24,6 +23,7 @@ public class Map : MonoBehaviour
 
     private void Awake()
     {
+        grid = groundTilemap.layoutGrid;
         bridgeBuilder.BridgeTilemap = bridgesTilemap;
     }
 
@@ -108,32 +108,57 @@ public class Map : MonoBehaviour
             //End pos is pure water
             if (!endHasBridge)
             {
-                //No wood to build the bridge
-                if (!playerCanBuildBridge)
-                {
-                    return false;
-                }
-                else
+                if (playerCanBuildBridge)
                 {
                     //We can build a bridge to the next tile.
 
                     //Are we on the ground ?
                     if (playerIsOnGround)
                     {
-                        //no
+                        //yes
                         //start a new bridge
                         bridgeBuilder.StartNewBridge(endPos); //also add plank
                     }
                     else
                     {
-                        //yes
-                        //continue current bridge
-                        bridgeBuilder.AddPlank(endPos);
+                        //no
+
+                        //Are we on an extremity of the bridge ?
+                        if (bridgeBuilder.IsAnExtremityOfCurrentBridge(startPos))
+                        {
+                            /*
+                            Bridge currentBridge = bridgeBuilder.CurrentBridge;
+
+                            if (currentBridge.Size <= 1)
+                            {
+                                bridgeBuilder.AddPlank(endPos);
+                            }
+                            else
+                            {
+                                //Verify to which end add the plank.
+                                Vector3Int playerCell = grid.WorldToCell(startPos);
+
+                            }
+                            if (bridgeBuilder.CurrentBridge.LastPlank.Equals) */
+                                //continue current bridge
+                            bridgeBuilder.AddPlank(endPos, startPos);
+                        }
+                        else
+                        {
+                            //Can't continue a bridge from mid-section of the bridge.
+                            return false;
+                        }
                     }
 
                     player.woodCount--;
 
                     return true;
+                }
+                else
+                {
+
+                    //No wood to build the bridge
+                    return false;
                 }
             }
             else //Target Tile has a bridge
@@ -142,20 +167,38 @@ public class Map : MonoBehaviour
                 if (bridgeBuilder.ArePlanksOnSameBridge(startPos, endPos))
                 {
                     //yes
-                    bridgeBuilder.RemovePlank(startPos); //remove behind ourselves.
-                    player.woodCount++;
 
-                    return true;
+                    /**
+                     * We can only backtrack on a bridge, one plank must be an extremity,
+                     * and the other one the following one
+                     * */
+
+                    if (bridgeBuilder.IsAnExtremityOfCurrentBridge(startPos) &&
+                        bridgeBuilder.ArePlanksConsecutive(startPos, endPos))
+                    {
+                        bridgeBuilder.RemovePlank(startPos); //remove behind ourselves.
+                        player.woodCount++;
+                        return true;
+                    }
+
+                    return false;
                 }
                 else 
                 {
                     //no
 
-                    //Are we on ground ?
-                    if (playerIsOnGround)
+                    //Are we on ground and climbing on an extremity ?
+                    if (playerIsOnGround && bridgeBuilder.IsAnExtremityOfTargetBridge(endPos))
                     {
                         //This is our new current bridge
                         bridgeBuilder.SetTargetBridgeAsCurrent(endPos);
+                        
+                        //Reverse the order of the bridge if we entered from the end
+                        if (bridgeBuilder.CurrentBridge.LastPlank.Equals(grid.WorldToCell(endPos)))
+                        {
+                            bridgeBuilder.CurrentBridge.Reverse();
+                        }
+
                         return true;
                     }
                     else
@@ -207,6 +250,42 @@ public class Map : MonoBehaviour
     {
         //Get Tile =/= null ?
         return tilemap.HasTile(tilemap.WorldToCell(worldCellPos));
+    }
+
+    private void OnDrawGizmos()
+    {
+        foreach (Bridge bridge in bridgeBuilder.Bridges)
+        {
+            if (!bridge.IsEmpty)
+            {
+                //Set color
+                if (bridge == bridgeBuilder.CurrentBridge)
+                {
+                    Gizmos.color = Color.green;
+                }
+                else {
+                    Gizmos.color = Color.cyan;
+                }
+
+                Vector3 offset = (Vector3.right + Vector3.up) * 0.5f;
+
+                for (int i = 0; i < bridge.Size; i++)
+                {
+                    Vector3Int plank = bridge.Planks[i];
+                    Gizmos.DrawSphere(grid.CellToWorld(plank) + offset, 0.15f);
+
+                    if (bridge.Size > 1 && i < bridge.Size - 1)
+                    {
+                        Gizmos.DrawLine(grid.CellToWorld(plank) + offset, grid.CellToWorld(bridge.Planks[i + 1]) + offset);
+                    }
+                }
+
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(grid.CellToWorld(bridge.Planks[0]) + offset, 0.15f);
+            }
+
+        }
     }
 
 }

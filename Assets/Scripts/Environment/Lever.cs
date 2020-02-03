@@ -17,6 +17,10 @@ public class Lever : Interactable {
     private Sprite switchedOffSprite;
 
 
+    private void OnValidate()
+    {
+        UpdateSprite();
+    }
     // Use this for initialization
     void Start () {
 

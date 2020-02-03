@@ -28,20 +28,13 @@ public class BridgeBuilder
 
     public Bridge CurrentBridge { get => currentBridge; }
     public Tilemap BridgeTilemap { set => bridgeTilemap = value; }
+    public List<Bridge> Bridges { get => bridges; }
 
     public void StartNewBridge(Vector3 worldPos)
     {
-        /*
-        currentBridge
-        if (HasBridge(worldPos) || currentBridge != null)
-        {
-            //Already has a bridge
-            return false;
-        } */
-
         currentBridge = new Bridge();
         bridges.Add(currentBridge);
-        AddPlank(worldPos);
+        AddPlank(currentBridge, worldPos);
 
     }
 
@@ -50,8 +43,16 @@ public class BridgeBuilder
         currentBridge = null;
     }
 
-    public void AddPlank(Vector3 worldPos)
+    public void AddPlank(Vector3 worldPos, Vector3 worldPreviousPos)
     {
+        //We use the previous pos to tell to which end add the planks
+
+        //If the previous pos was not the last plank
+        if (!WorldToCell(worldPreviousPos).Equals(currentBridge.LastPlank))
+        {
+            currentBridge.Reverse();
+        }
+
         AddPlank(currentBridge, worldPos);
     }
 
@@ -64,6 +65,26 @@ public class BridgeBuilder
     public void SetTargetBridgeAsCurrent(Vector3 worldPos)
     {
         currentBridge = GetBridgeAt(worldPos);
+    }
+
+    public bool IsAnExtremityOfCurrentBridge(Vector3 worldPos)
+    {
+        return currentBridge.IsAnExtremity(WorldToCell(worldPos));
+    }
+
+    public bool IsAnExtremityOfTargetBridge(Vector3 worldPos)
+    {
+        Bridge bridge = GetBridgeAt(worldPos);
+        if (bridge != null)
+        {
+            return bridge.IsAnExtremity(WorldToCell(worldPos));
+        }
+        return false;
+    }
+
+    public bool ArePlanksConsecutive(Vector3 worldPos1, Vector3 worldPos2)
+    {
+        return currentBridge.ArePlanksConsecutive(WorldToCell(worldPos1), WorldToCell(worldPos2));
     }
 
     public bool ArePlanksOnSameBridge(Vector3 worldPos1, Vector3 worldPos2)
@@ -80,8 +101,15 @@ public class BridgeBuilder
 
     #region Private Methods
 
+
+
     private void AddPlank(Bridge bridge, Vector3 worldPos)
     {
+        //Verify we put the plank at the right end
+        if (bridge.Size > 1 && Vector3Int.Distance(bridge.LastPlank, WorldToCell(worldPos)) > 1f)
+        {
+            bridge.Planks.Reverse();
+        }
         bridge.AddPlank(WorldToCell(worldPos));
         RenderBridge(bridge);
     }
@@ -99,7 +127,13 @@ public class BridgeBuilder
         if (bridge.IsEmpty)
         {
             bridges.Remove(bridge);
+
+            if (bridge == currentBridge)
+            {
+                currentBridge = null;
+            }
         }
+
     }
 
 
@@ -130,6 +164,7 @@ public class BridgeBuilder
     {
         bridgeTiles.RenderBridge(bridgeTilemap, bridge);
     }
+
 
     #endregion
 }

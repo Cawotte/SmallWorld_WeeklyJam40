@@ -18,12 +18,9 @@ public abstract class Door : Interactable {
         get => isOpen;
         protected set
         {
-            if (isOpen != value)
-            {
-                UpdateSprite();
-            }
 
             isOpen = value;
+            UpdateSprite();
         }
     }
 
@@ -31,6 +28,7 @@ public abstract class Door : Interactable {
     {
         UpdateSprite();
     }
+
     public void Start()
     {
         UpdateSprite();

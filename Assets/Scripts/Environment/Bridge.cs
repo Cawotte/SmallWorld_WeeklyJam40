@@ -69,24 +69,31 @@ public class Bridge {
     {
         planks.Remove(plankCell);
     }
-    
-    public bool RemoveLastPlank()
+
+    public void Reverse()
     {
-        if (hasEnd) hasEnd = false;
-
-        Vector3Int plankCell = LastPlank;
-        //Vector3Int plankCell = bridgesTilemap.WorldToCell(removedCoor);
-
-        planks.RemoveAt(planks.Count - 1);
-
-        //bridgesTilemap.SetTile(plankCell, null);
-        //bridgesTilemap.RefreshTile(cellCoor);
-        //bridgetiles.renderTiles(bridgesTilemap, planks);
-
-        //True if empty
-        return (planks.Count == 0);
+        planks.Reverse();
     }
 
+
+    public bool ArePlanksConsecutive(Vector3Int a, Vector3Int b)
+    {
+        for (int i = 0; i < Size - 1; i++)
+        {
+            Vector3Int plank = planks[i];
+            if (plank.Equals(a) || plank.Equals(b))
+            {
+                return planks[i + 1].Equals(a) || planks[i + 1].Equals(b);
+            }
+        }
+
+        return false;
+    }
+    
+    public bool IsAnExtremity(Vector3Int plankCell)
+    {
+        return plankCell.Equals(planks[0]) || plankCell.Equals(planks[Size - 1]);
+    }
 
     public bool Contains(Vector3Int plankPos)
     {
