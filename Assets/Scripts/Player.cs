@@ -58,7 +58,7 @@ public class Player : MonoBehaviour {
         if ( horizontal != 0 )
             vertical = 0;
       
-        //If there's a direction, we are trying to move.
+        //If there's a direction, we try to move.
         if (horizontal != 0 || vertical != 0)
         {
             StartCoroutine(actionCooldown(0.2f));
@@ -102,139 +102,7 @@ public class Player : MonoBehaviour {
 
             StartCoroutine(BlockedMovement(endPos));
         }
-        /*
-        //If the player starts their movement from a ground tile.
-        if (isOnGround)
-        {
 
-            //If the front tile is a walkable ground tile, the player moves here.
-            if (hasGroundTile && !hasObstacleTile)
-            {
-                if ( doorCheck(targetCell) )
-                {
-                    grassSound();
-                    StartCoroutine(SmoothMovement(targetCell));
-                }
-                else
-                    StartCoroutine(BlockedMovement(targetCell));
-               
-            }
-
-            //If the front tile is a bridge plank
-            else if (hasBridgeTile)
-            {
-                if ( doorCheck(targetCell ))
-                {
-                    currentBridge = Bridge.belongsTo(bridges, targetCell);
-                    Debug.Log(currentBridge);
-                    //We verify we are entering the bridge from one of its extremity 
-                    if (currentBridge.isExtremity(targetCell))
-                    {
-                        //Debug.Log("Entering a bridge!");
-                        // If we are entering the bridge from the start, we reverse end/beginning to handle its treatement more easily.
-                        if (currentBridge.firstPlank().Equals(targetCell))
-                            currentBridge.reverseBridge();
-                        currentBridge.setHasEnd(false);
-
-                        bridgeSound();
-                        StartCoroutine(SmoothMovement(targetCell));
-                    }
-                    else //otherwise we ignore it.
-                        currentBridge = null;
-                }
-                else
-                    StartCoroutine(BlockedMovement(targetCell));
-            }
-            //If the player has wood to build a new bridge over the water, he build a bridge and moves there.
-            else if (!hasGroundTile && !hasBridgeTile && woodCount > 0 && !hasObstacleTile )
-            {
-                if (doorCheck(targetCell))
-                {
-                    //Debug.Log("Building a new bridge !");
-                    woodCount--; updateWoodText();
-                    currentBridge = new Bridge(bridgesTilemap, bridgeTiles); //We create a new bridge
-                                                                             //currentBridge = ScriptableObject.CreateInstance<Bridge>().InitB(bridgeTiles);
-                                                                             //currentBridge.initB(bridgeTiles);
-                    bridges.Add(currentBridge); //We add it to the bridge list
-                    currentBridge.addPlank(targetCell); //We add a plank to the bridge
-
-                    bridgeSound();
-                    StartCoroutine(SmoothMovement(targetCell)); //We move to this new plank.
-                }
-                else
-                    StartCoroutine(BlockedMovement(targetCell));
-            }
-        }
-        //If the player starts their movement from a bridge tile
-        else if (isOnBridge)
-        {
-            //If there's an obstacle
-            if ( hasObstacleTile )
-                StartCoroutine(BlockedMovement(targetCell));
-            //If they are leaving the bridge for a walkable ground tile.
-            else if (hasGroundTile)
-            {
-                Debug.Log("Leaving a bridge !");
-                //We check if there's a door where we ends up, and handle it.
-                if ( doorCheck(targetCell) )
-                {
-                    grassSound();
-                    StartCoroutine(SmoothMovement(targetCell));
-
-                    //If we are leaving the last plank of the bridge, we delete it.
-                    if (currentBridge.firstPlank().Equals(startCell))
-                    {
-                        Debug.Log("Deleting the bridge !");
-                        currentBridge.removeLastPlank();
-                        bridges.Remove(currentBridge);
-                        woodCount++; updateWoodText();
-                    }
-                    else
-                        currentBridge.setHasEnd(true); //The bridge get an end.
-
-                    currentBridge = null;
-                }
-                else
-                    StartCoroutine(BlockedMovement(targetCell));
-
-            }
-            //If they keep walking toward the water, they have wood, and it's the end of the bridge.
-            else if (  !hasBridgeTile && woodCount > 0 && currentBridge.isOnLastPlank(startCell) )
-            {
-                if ( doorCheck(targetCell) )
-                {
-                    Debug.Log("adding a plank!");
-                    woodCount--; updateWoodText();
-                    currentBridge.addPlank(targetCell);
-
-                    bridgeSound();
-                    StartCoroutine(SmoothMovement(targetCell));
-                }
-                else
-                    StartCoroutine(BlockedMovement(targetCell));
-            }
-            //If they are backtracking the bridge
-            else if ( currentBridge.playerIsBackTracking(startCell, targetCell) )
-            {
-                if (doorCheck(targetCell))
-                {
-                    Debug.Log("Backtracking!");
-
-                    bridgeSound();
-                    StartCoroutine(SmoothMovement(targetCell));
-                    currentBridge.removeLastPlank();
-                    woodCount++; updateWoodText();
-                }
-                else
-                    StartCoroutine(BlockedMovement(targetCell));
-            }
-
-        }
-
-        if (!isMoving)
-            StartCoroutine(BlockedMovement(targetCell));
-        */
-        
     }
 
     private IEnumerator SmoothMovement(Vector3 end)
@@ -313,50 +181,6 @@ public class Player : MonoBehaviour {
         isMoving = false;
     }
 
-    public IEnumerator Teleport(PassageWay Teleporter, float aTime)
-    {
-
-        //If the teleporter is in use, abort
-        if (Teleporter.isTeleporting) yield break;
-
-        //We wait for any other movement coroutines to finish before starting this one.
-        while (isMoving) yield return null;
-
-        isMoving = true;
-
-        Debug.Log("Teleporting from " + name);
-
-        //We set both teleporters as "In Use"
-        Teleporter.setTeleportersAvailability(true);
-        //we prevent the player from moving while teleporting
-
-        float alpha = GetComponent<Renderer>().material.color.a;
-
-        //The character disappear
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, 0f, t));
-            GetComponent<Renderer>().material.color = newColor;
-            yield return null;
-        }
-
-        //Now me teleport the player
-        transform.position = Teleporter.exitPos();
-
-        //The character fades back to reality 
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(0f, alpha, t));
-            GetComponent<Renderer>().material.color = newColor;
-            yield return null;
-        }
-
-        //We allow the player to move again
-        isMoving = false;
-        //We set both teleporter as "Available"
-        Teleporter.setTeleportersAvailability(false);
-    }
-
     private IEnumerator actionCooldown(float cooldown)
     {
         onCooldown = true;
@@ -369,71 +193,6 @@ public class Player : MonoBehaviour {
         }
 
         onCooldown = false;
-    }
-
-    IEnumerator Teleport(Vector2 targetPos, float aTime)
-    {
-        float alpha = GetComponent<Renderer>().material.color.a;
-
-        //The character disappear
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, 0f, t));
-            GetComponent<Renderer>().material.color = newColor;
-            yield return null;
-        }
-
-        //Now me teleport it
-        transform.position = targetPos;
-
-        //Now it fades back to reality 
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, 1f, t));
-            GetComponent<Renderer>().material.color = newColor;
-            yield return null;
-        }
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D coll)
-    {
-        //Debug.Log("Something touched!");
-        //If we collided with the exit, we load the next level in two seconds.
-        if ( coll.tag == "Exit")
-        {
-            Debug.Log("Sortie touché!");
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("victory").source.Play();
-            onExit = true; //Prevent the player from moving.
-            Invoke("NextLevel", 1f);
-            //enabled = false;
-        }
-        else if ( coll.tag == "Wood")
-        {
-            woodCount++; updateWoodText();
-            //Debug.Log("You picked up wood ! You have " + woodCount + "piece of woods.");
-            coll.gameObject.SetActive(false);
-
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("woodpickup").source.Play();
-        }
-        else if ( coll.tag == "Passage" )
-        {
-            //Debug.Log("Teleport!");
-            PassageWay passage = coll.gameObject.GetComponent<PassageWay>();
-            //StartCoroutine(Teleport(passage, 0.2f));
-            StartCoroutine(passage.Teleport(this, 0.2f));
-            //StartCoroutine(actionCooldown(0.4f));
-        }
-        else if ( coll.tag == "Key" )
-        {
-            //Debug.Log("Key picked!");
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("keypickup").source.Play();
-            keyCount++; updateKeyText();
-            coll.gameObject.SetActive(false);
-        }
     }
 
     public void grassSound()
@@ -461,10 +220,5 @@ public class Player : MonoBehaviour {
         keyText.text = "keys:" + keyCount;
     }
 
-
-    private void NextLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
-    }
 
 }

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassageWay : MonoBehaviour {
+public class Teleporter : MonoBehaviour {
 
-    public PassageWay exitPassage;
+    public Teleporter exitPassage;
 
     [HideInInspector] public bool isTeleporting = false;
 
+    private float teleportDuration = 0.2f;
     public Vector2 exitPos()
     {
         return exitPassage.transform.position;
@@ -17,6 +18,16 @@ public class PassageWay : MonoBehaviour {
     {
         isTeleporting = boolean;
         exitPassage.isTeleporting = boolean;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Player player = collision.GetComponent<Player>();
+
+        if (player)
+        {
+            StartCoroutine(Teleport(player, teleportDuration));
+        }
     }
 
 
@@ -66,5 +77,14 @@ public class PassageWay : MonoBehaviour {
         player.isMoving = false;
         //We set both teleporter as "Available"
         isTeleporting = false; exitPassage.isTeleporting = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (exitPassage != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position, exitPassage.transform.position);
+        }
     }
 }

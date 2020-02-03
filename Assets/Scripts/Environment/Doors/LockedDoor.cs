@@ -5,8 +5,6 @@ using UnityEngine;
 public class LockedDoor : Door
 {
 
-    private new bool isOpen = false;
-
     public override bool CanMoveTo(Player player)
     {
 
