@@ -1,23 +1,30 @@
-﻿using System.Collections;
+﻿using Cawotte.Toolbox.Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Teleporter : MonoBehaviour {
 
-    public Teleporter exitPassage;
+    [SerializeField]
+    private Teleporter exitPassage;
 
     [HideInInspector] public bool isTeleporting = false;
 
     private float teleportDuration = 0.2f;
-    public Vector2 exitPos()
-    {
-        return exitPassage.transform.position;
-    }
 
-    public void setTeleportersAvailability(bool boolean)
+
+    [Header("Audio")]
+    [SerializeField]
+    private AudioManager audioManager = null;
+
+    [SerializeField]
+    private Sound staircaseSound = null;
+
+    private AudioSourcePlayer audioPlayer = null;
+
+    private void Awake()
     {
-        isTeleporting = boolean;
-        exitPassage.isTeleporting = boolean;
+        audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -44,8 +51,7 @@ public class Teleporter : MonoBehaviour {
         player.isMoving= true;
 
         //Staircase sound!
-        if (AudioManager.getInstance() != null)
-            AudioManager.getInstance().Find("staircase").source.Play();
+        audioPlayer.PlaySound(staircaseSound);
 
         Debug.Log("Teleporting from " + name);
 
@@ -63,7 +69,7 @@ public class Teleporter : MonoBehaviour {
         }
         
         //Now me teleport the player
-        player.transform.position = exitPos();
+        player.transform.position = exitPassage.transform.position;
 
         //The character fades back to reality 
         for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
@@ -79,7 +85,7 @@ public class Teleporter : MonoBehaviour {
         isTeleporting = false; exitPassage.isTeleporting = false;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (exitPassage != null)
         {

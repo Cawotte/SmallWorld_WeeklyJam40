@@ -1,4 +1,5 @@
 ﻿
+using Cawotte.Toolbox.Audio;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +17,22 @@ public class Lever : Interactable {
     [SerializeField]
     private Sprite switchedOffSprite = null;
 
+    [Header("Audio")]
+    [SerializeField]
+    private AudioManager audioManager = null; 
 
+    [SerializeField]
+    private Sound leverSound;
+
+    private AudioSourcePlayer audioPlayer = null;
+
+
+    private void Awake()
+    {
+        audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
+    }
+
+    //Update sprite when modifying the settings in EditMode
     private void OnValidate()
     {
         UpdateSprite();
@@ -46,13 +62,7 @@ public class Lever : Interactable {
             door.SwitchOpenClose();
         }
 
-
-        //Click sound !
-        if (AudioManager.getInstance() != null)
-        {
-            AudioManager.getInstance().Find("leverClick").source.Play();
-            AudioManager.getInstance().Find("blocked").source.mute = true;
-        }
+        audioPlayer.PlaySound(leverSound);
 
     }
 

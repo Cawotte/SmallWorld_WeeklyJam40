@@ -1,20 +1,10 @@
 ﻿
 using UnityEngine;
 
-public class Wood : MonoBehaviour
+public class Wood : Pickup
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void onPickup(Player player)
     {
-        Player player = collision.GetComponent<Player>();
-
-        if (player)
-        {
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("woodpickup").source.Play();
-
-            player.WoodCount++; 
-
-            Destroy(gameObject);
-        }
+        player.WoodCount++;
     }
 }

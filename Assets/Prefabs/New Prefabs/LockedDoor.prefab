@@ -123,3 +123,5 @@ MonoBehaviour:
   openedSprite: {fileID: 21300570, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   closedSprite: {fileID: 21300538, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   isOpen: 0
+  audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
+  unlockingDoor: {fileID: 11400000, guid: c26800e7d7500ba4ba9f4c2d730b3968, type: 2}

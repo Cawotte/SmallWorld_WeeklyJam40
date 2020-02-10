@@ -1,10 +1,23 @@
-﻿using System.Collections;
+﻿using Cawotte.Toolbox.Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Exit : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField]
+    private AudioManager audioManager = null;
+
+    [SerializeField]
+    private Sound endLevel = null;
+
+    private AudioSourcePlayer audioPlayer = null;
+    private void Awake()
+    {
+        audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,8 +27,8 @@ public class Exit : MonoBehaviour
         {
 
             Debug.Log("Sortie touché!");
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("victory").source.Play();
+
+            audioPlayer.PlaySound(endLevel);
 
             player.onExit = true; //Prevent the player from moving.
             Invoke("NextLevel", 1f);

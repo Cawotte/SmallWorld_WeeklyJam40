@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;	
-using UnityEngine.SceneManagement;
-using TMPro;
+using Cawotte.Toolbox.Audio;
+
+/// <summary>
+/// Scripts that handle the Player character
+/// </summary>
 
 public class Player : MonoBehaviour {
 
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private Map map = null;
+
+    private AudioSourcePlayer audioPlayer = null;
 
     [Header("ScriptableObject Variables")]
     [SerializeField]
@@ -30,7 +33,18 @@ public class Player : MonoBehaviour {
     public bool onExit = false;
     private float moveTime = 0.1f;
 
-    private AudioSource walkingSound;
+    [Header("Audio")]
+    [SerializeField]
+    private AudioManager audioManager;
+
+    [SerializeField]
+    private Sound grassStep = null;
+
+    [SerializeField]
+    private Sound bridgeStep = null;
+
+    [SerializeField]
+    private Sound blockedStep = null;
 
     public int WoodCount
     {
@@ -56,14 +70,13 @@ public class Player : MonoBehaviour {
         }
     }
 
-    //public RuleTile tileBridge;
+    //Screen.SetResolution(1280, 600, false);
 
-    // Use this for initialization
-    void Start () {
-
-        //Default walking sound is the grass one
-        grassSound();
+    private void Awake()
+    {
+        audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
     }
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -104,19 +117,20 @@ public class Player : MonoBehaviour {
 
         bool hasGroundTile = map.IsGround(endPos); //If target Tile has a ground
         bool hasObstacleTile = map.IsObstacle(endPos); //if target Tile has an obstacle
-        bool hasBridgeTile = map.IsBridge(endPos); //if target Tile has a bridge (plank)
 
 
         bool canWalk = map.CanMoveFromTo(this, transform.position, endPos);
+
+        bool hasBridgeTile = map.IsBridge(endPos); //if target Tile has a bridge (plank)
 
         if (canWalk)
         {
             if (hasBridgeTile)
             {
-                bridgeSound();
+                audioPlayer.PlaySound(bridgeStep);
             } else
             {
-                grassSound();
+                audioPlayer.PlaySound(grassStep);
             }
 
             StartCoroutine(SmoothMovement(endPos));
@@ -135,12 +149,6 @@ public class Player : MonoBehaviour {
 
         isMoving = true;
 
-        //Play movement sound
-        if ( walkingSound != null )
-        {
-            walkingSound.loop = true;
-            walkingSound.Play();
-        }
 
         float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
         float inverseMoveTime = 1 / moveTime;
@@ -154,8 +162,6 @@ public class Player : MonoBehaviour {
             yield return null;
         }
 
-        if (walkingSound != null)
-            walkingSound.loop = false;
 
         isMoving = false;
     }
@@ -167,9 +173,7 @@ public class Player : MonoBehaviour {
 
         isMoving = true;
 
-
-        if (AudioManager.getInstance() != null)
-            AudioManager.getInstance().Find("blocked").source.Play();
+        audioPlayer.PlaySound(blockedStep);
 
         Vector3 originalPos = transform.position;
 
@@ -196,12 +200,14 @@ public class Player : MonoBehaviour {
             yield return null;
         }
 
+        /*
         //The lever disable the sound so its doesn't overlap with this one, so it blocked has been muted, we restore it.
         if ( AudioManager.getInstance() != null && AudioManager.getInstance().Find("blocked").source.mute )
         {
             AudioManager.getInstance().Find("blocked").source.Stop();
             AudioManager.getInstance().Find("blocked").source.mute = false;
-        }
+        } */
+
         isMoving = false;
     }
 
@@ -219,16 +225,6 @@ public class Player : MonoBehaviour {
         onCooldown = false;
     }
 
-    public void grassSound()
-    {
-        if (AudioManager.getInstance() != null)
-            walkingSound = AudioManager.getInstance().Find("grass").source;
-    }
-    public void bridgeSound()
-    {
-        if ( AudioManager.getInstance() != null )
-            walkingSound = AudioManager.getInstance().Find("bridge").source;
-    }
 
 
 }

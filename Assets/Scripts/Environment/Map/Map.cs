@@ -228,6 +228,9 @@ public class Map : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (bridgeBuilder == null || bridgeBuilder.Bridges == null)
+            return;
+
         foreach (Bridge bridge in bridgeBuilder.Bridges)
         {
             if (!bridge.IsEmpty)

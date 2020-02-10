@@ -98,6 +98,8 @@ MonoBehaviour:
   doorList: []
   switchedOnSprite: {fileID: 21300700, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   switchedOffSprite: {fileID: 21300668, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
+  leverSound: {fileID: 11400000, guid: a3dc69266afc04a4f93e26d940b3b07e, type: 2}
 --- !u!61 &6533852438008071197
 BoxCollider2D:
   m_ObjectHideFlags: 0

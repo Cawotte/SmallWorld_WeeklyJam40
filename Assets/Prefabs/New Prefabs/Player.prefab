@@ -97,13 +97,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  woodText: {fileID: 0}
-  keyText: {fileID: 0}
-  woodCount: 10
-  keyCount: 0
+  woodCount: {fileID: 11400000, guid: dca2897ed3933a443968c5a42d76354e, type: 2}
+  keyCount: {fileID: 11400000, guid: 10f8c6d6b9783a643a744c1ae24eb16e, type: 2}
   isMoving: 0
   onCooldown: 0
   onExit: 0
+  audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
+  grassStep: {fileID: 11400000, guid: 2fd585455fdfeb94380e6b72089ed39d, type: 2}
+  bridgeStep: {fileID: 11400000, guid: a0e6ea0473194db4c9e399661119e82c, type: 2}
+  blockedStep: {fileID: 11400000, guid: 5ffbaf4c47f3618439c8903c2ac01a6b, type: 2}
 --- !u!50 &933978320283486774
 Rigidbody2D:
   serializedVersion: 4

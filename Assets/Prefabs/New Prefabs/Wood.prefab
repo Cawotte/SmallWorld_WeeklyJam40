@@ -110,3 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b00037c736bc20a48900ab838550cb06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
+  toPlayOnPickup: {fileID: 11400000, guid: edfdba44b217194439cd032ae4cec13c, type: 2}

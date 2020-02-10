@@ -1,9 +1,24 @@
-﻿using System.Collections;
+﻿using Cawotte.Toolbox.Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LockedDoor : Door
 {
+    [Header("Audio")]
+    [SerializeField]
+    private AudioManager audioManager = null;
+
+    [SerializeField]
+    private Sound unlockingDoor = null;
+
+    private AudioSourcePlayer audioPlayer = null;
+
+    private void Awake()
+    {
+        audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
+    }
+
 
     public override bool CanMoveTo(Player player)
     {
@@ -29,7 +44,6 @@ public class LockedDoor : Door
     {
         IsOpen = true;
 
-        if (AudioManager.getInstance() != null)
-            AudioManager.getInstance().Find("unlockDoor").source.Play();
+        audioPlayer.PlaySound(unlockingDoor);
     }
 }

@@ -1,21 +1,11 @@
 ﻿
+using Cawotte.Toolbox.Audio;
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class Key : Pickup
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void onPickup(Player player)
     {
-        Player player = collision.GetComponent<Player>();
-
-        if (player)
-        {
-
-            if (AudioManager.getInstance() != null)
-                AudioManager.getInstance().Find("keypickup").source.Play();
-
-            player.KeyCount++;
-
-            Destroy(gameObject);
-        }
+        player.KeyCount++;
     }
 }

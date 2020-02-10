@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class TextUI : GameEventListener
+public class TrackIntTextUI : GameEventListener
 {
     private TextMeshProUGUI textMeshPro;
 
