@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300668, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &114841508006934164
@@ -96,8 +96,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSwitchedOn: 0
   doorList: []
-  switchedOnSprite: {fileID: 0}
-  switchedOffSprite: {fileID: 0}
+  switchedOnSprite: {fileID: 21300700, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  switchedOffSprite: {fileID: 21300668, guid: 2e4b58c8841357748b874c5f3ddb23c8, type: 3}
+  audioManager: {fileID: 0}
+  leverSound: {fileID: 0}
 --- !u!61 &61838825920471948
 BoxCollider2D:
   m_ObjectHideFlags: 0

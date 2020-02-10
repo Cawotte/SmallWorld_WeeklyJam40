@@ -75,4 +75,15 @@ public class Lever : Interactable {
             GetComponent<SpriteRenderer>().sprite = switchedOffSprite;
     }
 
+    //Draw line to all doors it triggers
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+
+        foreach (LeveredDoor door in doorList)
+        {
+            Gizmos.DrawLine(transform.position, door.transform.position);
+        }
+    }
+
 }
