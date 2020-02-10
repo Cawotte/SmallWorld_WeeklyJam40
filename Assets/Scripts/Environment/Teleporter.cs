@@ -85,11 +85,11 @@ public class Teleporter : MonoBehaviour {
         isTeleporting = false; exitPassage.isTeleporting = false;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         if (exitPassage != null)
         {
-            Gizmos.color = Color.cyan;
+            Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, exitPassage.transform.position);
         }
     }
