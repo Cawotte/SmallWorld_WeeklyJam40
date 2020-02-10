@@ -47,6 +47,29 @@ public class Map : MonoBehaviour
         return !IsGround(worldPos) && !IsObstacle(worldPos);
     }
 
+    /// <summary>
+    /// Use raycasting to determine if the tile has a Lever
+    /// </summary>
+    /// <param name="worldPos"></param>
+    /// <returns></returns>
+    public bool HasLever(Vector3 worldPos)
+    {
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPos, Vector3.forward, 1f);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (!hit)
+                continue;
+
+            if (hit.collider.gameObject.GetComponent<Lever>() != null)
+                return true;
+
+        }
+
+        return false;
+    }
+
     public bool CanMoveFromTo(Player player, Vector3 startPos, Vector3 endPos)
     {
         Vector3Int cellStartPos = grid.WorldToCell(startPos);

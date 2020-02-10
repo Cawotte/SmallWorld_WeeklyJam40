@@ -169,11 +169,12 @@ public class Player : MonoBehaviour {
     //Blocked animation
     private IEnumerator BlockedMovement(Vector3 end)
     {
-        //while (isMoving) yield return null;
 
         isMoving = true;
 
-        audioPlayer.PlaySound(blockedStep);
+        //Don't play the blocked sound if there's a lever, no negative feedback.
+        if (!map.HasLever(end))
+            audioPlayer.PlaySound(blockedStep);
 
         Vector3 originalPos = transform.position;
 
