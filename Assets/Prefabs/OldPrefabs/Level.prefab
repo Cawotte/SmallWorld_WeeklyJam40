@@ -298,17 +298,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3c576275abf3c4f8cd697dd9fbd514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTilemap: {fileID: 8195094280034156206}
-  obstaclesTilemap: {fileID: 8195094282057968736}
-  bridgesTilemap: {fileID: 8195094282377750652}
-  woodText: {fileID: 114547380099389924}
-  keyText: {fileID: 114606321050844822}
-  woodCount: 0
-  keyCount: 0
+  mapGlobalReference: {fileID: 0}
+  woodCount: {fileID: 0}
+  keyCount: {fileID: 0}
   isMoving: 0
-  bridgeTiles: {fileID: 11400000, guid: ecb37429cf62c0a4996c2e90ba37f8ef, type: 2}
   onCooldown: 0
   onExit: 0
+  audioManager: {fileID: 0}
+  grassStep: {fileID: 0}
+  bridgeStep: {fileID: 0}
+  blockedStep: {fileID: 0}
 --- !u!61 &61848342504664612
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2206,7 +2205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4484868462157016}
   m_Layer: 0
-  m_Name: LevelPrefab
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
