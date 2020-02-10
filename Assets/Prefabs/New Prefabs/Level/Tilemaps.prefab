@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe8a38e01faf1f42b87f24d9181cd11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalReference: {fileID: 11400000, guid: 328c0bac9a1e368489bf9dfc7fcc609c, type: 2}
   groundTilemap: {fileID: 4172194031222651115}
   obstaclesTilemap: {fileID: 4172194031367154213}
   bridgesTilemap: {fileID: 4172194028767899193}

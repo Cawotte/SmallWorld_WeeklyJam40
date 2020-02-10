@@ -5,6 +5,12 @@ using UnityEngine.Tilemaps;
 
 public class Map : MonoBehaviour
 {
+    [SerializeField]
+    private MapGlobalReference globalReference;
+
+
+    [Header("Tilemaps")]
+
     private Grid grid;
 
     [SerializeField]
@@ -25,6 +31,8 @@ public class Map : MonoBehaviour
     {
         grid = groundTilemap.layoutGrid;
         bridgeBuilder.BridgeTilemap = bridgesTilemap;
+
+        globalReference.RegisterMap(this);
     }
 
     public bool IsGround(Vector3 worldPos)

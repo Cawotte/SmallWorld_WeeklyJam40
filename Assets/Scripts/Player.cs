@@ -13,6 +13,8 @@ public class Player : MonoBehaviour {
     [Header("References")]
 
     [SerializeField]
+    private MapGlobalReference mapGlobalReference = null;
+
     private Map map = null;
 
     private AudioSourcePlayer audioPlayer = null;
@@ -77,9 +79,13 @@ public class Player : MonoBehaviour {
         audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
     }
 
-	
-	// Update is called once per frame
-	void Update () {
+    private void Start()
+    {
+        map = mapGlobalReference.Map;
+    }
+
+    // Update is called once per frame
+    void Update () {
 
 
         //We do nothing if the player is still moving.

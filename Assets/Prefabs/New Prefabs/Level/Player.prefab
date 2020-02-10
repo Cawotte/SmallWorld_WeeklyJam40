@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3c576275abf3c4f8cd697dd9fbd514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 0}
+  mapGlobalReference: {fileID: 11400000, guid: 328c0bac9a1e368489bf9dfc7fcc609c, type: 2}
   woodCount: {fileID: 11400000, guid: dca2897ed3933a443968c5a42d76354e, type: 2}
   keyCount: {fileID: 11400000, guid: 10f8c6d6b9783a643a744c1ae24eb16e, type: 2}
   isMoving: 0
