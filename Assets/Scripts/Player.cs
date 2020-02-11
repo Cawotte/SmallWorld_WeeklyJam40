@@ -20,6 +20,9 @@ public class Player : MonoBehaviour {
     private AudioSourcePlayer audioPlayer = null;
 
     [Header("ScriptableObject Variables")]
+
+    [SerializeField]
+    private int woodCountStartingValue = 0;
     [SerializeField]
     private IntVariable woodCount = null;
 
@@ -82,6 +85,7 @@ public class Player : MonoBehaviour {
     private void Start()
     {
         map = mapGlobalReference.Map;
+        woodCount.Value = woodCountStartingValue;
     }
 
     // Update is called once per frame

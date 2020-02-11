@@ -56,6 +56,5 @@ public class CopyTilemap : MonoBehaviour
         }
 
         toCopy.RefreshAllTiles();
-        //toCopy.CompressBounds();
     }
 }

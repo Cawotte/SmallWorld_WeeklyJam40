@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -5038,7 +5038,7 @@ PrefabInstance:
     - target: {fileID: 2331640458229383117, guid: c2a58f168dbe3be4a9bed0779e0efc11,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2331640458229383117, guid: c2a58f168dbe3be4a9bed0779e0efc11,
         type: 3}
@@ -6236,7 +6236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643734351390064, guid: 797b8d1b5c110364cbfb791ba3387799, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4643734351390064, guid: 797b8d1b5c110364cbfb791ba3387799, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
