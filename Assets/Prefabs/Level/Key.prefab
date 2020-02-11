@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8564610806431822988}
   - component: {fileID: 8376626034801081006}
   - component: {fileID: 8507330489008743812}
-  - component: {fileID: 4574799322694087470}
+  - component: {fileID: 3459091731602095967}
   m_Layer: 0
   m_Name: Key
   m_TagString: Untagged
@@ -108,7 +108,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
---- !u!114 &4574799322694087470
+--- !u!114 &3459091731602095967
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,8 +117,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8560529692099401018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ec168cee1acc9f45a5e2d93c3aeede1, type: 3}
+  m_Script: {fileID: 11500000, guid: 55de54cbf67faa1469aa9af86031023a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toIncreaseOnPickup: {fileID: 11400000, guid: 10f8c6d6b9783a643a744c1ae24eb16e, type: 2}
   audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
   toPlayOnPickup: {fileID: 11400000, guid: bb3f13cfbfe9417499a0653ca46e2198, type: 2}

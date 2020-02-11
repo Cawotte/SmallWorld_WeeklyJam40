@@ -1,14 +1,18 @@
 ﻿using Cawotte.Toolbox.Audio;
 using UnityEngine;
 
-public abstract class Pickup : MonoBehaviour
+public class Pickup : MonoBehaviour
 {
-    [Header("Audio")]
-    [SerializeField]
-    protected AudioManager audioManager = null;
 
     [SerializeField]
-    protected Sound toPlayOnPickup = null;
+    private IntVariable toIncreaseOnPickup = null;
+
+    [Header("Audio")]
+    [SerializeField]
+    private AudioManager audioManager = null;
+
+    [SerializeField]
+    private Sound toPlayOnPickup = null;
 
     private AudioSourcePlayer audioPlayer = null;
 
@@ -16,8 +20,6 @@ public abstract class Pickup : MonoBehaviour
     {
         audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
     }
-
-    protected abstract void onPickup(Player player);
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -30,7 +32,7 @@ public abstract class Pickup : MonoBehaviour
                 onEndPlay: () => Destroy(gameObject)
             );
 
-            onPickup(player);
+            toIncreaseOnPickup.Value++;
 
             //Hide the sprite once picked up
             gameObject.GetComponent<SpriteRenderer>().enabled = false;

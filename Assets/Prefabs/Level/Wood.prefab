@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5324403547315556531}
   - component: {fileID: 5405530735146433361}
   - component: {fileID: 5270412379722283977}
-  - component: {fileID: 345440594994692188}
+  - component: {fileID: 5600454546900044648}
   m_Layer: 0
   m_Name: Wood
   m_TagString: Untagged
@@ -98,7 +98,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &345440594994692188
+--- !u!114 &5600454546900044648
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,8 +107,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5328221688676996829}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b00037c736bc20a48900ab838550cb06, type: 3}
+  m_Script: {fileID: 11500000, guid: 55de54cbf67faa1469aa9af86031023a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toIncreaseOnPickup: {fileID: 11400000, guid: dca2897ed3933a443968c5a42d76354e, type: 2}
   audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
   toPlayOnPickup: {fileID: 11400000, guid: edfdba44b217194439cd032ae4cec13c, type: 2}

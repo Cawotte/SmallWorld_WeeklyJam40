@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class LockedDoor : Door
 {
+
     [Header("Audio")]
     [SerializeField]
     private AudioManager audioManager = null;
