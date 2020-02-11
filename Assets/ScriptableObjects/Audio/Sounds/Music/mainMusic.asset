@@ -16,6 +16,6 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: 05e78b95f71a10843b30441eeb23d36b, type: 3}
   isMusic: 0
   volume: 0.5
-  pitch: 1
+  pitch: 0.75
   loop: 1
   source: {fileID: 0}
