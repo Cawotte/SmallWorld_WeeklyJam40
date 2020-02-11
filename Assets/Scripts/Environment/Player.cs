@@ -30,13 +30,20 @@ public class Player : MonoBehaviour {
     private IntVariable keyCount = null;
 
 
-    [Header("Player Info")]
+    [Header("Movements")]
 
-    public bool isMoving = false;
+    [SerializeField][ReadOnly]
+    private bool isMoving = false;
 
-    public bool onCooldown = false;
-    public bool onExit = false;
+    [SerializeField]
+    [ReadOnly]
+    private bool onExit = false;
+
+    [SerializeField]
     private float moveTime = 0.1f;
+
+    [SerializeField]
+    private float cooldownMovement = 0.1f;
 
     [Header("Audio")]
     [SerializeField]
@@ -75,6 +82,9 @@ public class Player : MonoBehaviour {
         }
     }
 
+    public bool IsMoving { get => isMoving; set => isMoving = value; }
+    public bool OnExit { get => onExit; set => onExit = value; }
+
     //Screen.SetResolution(1280, 600, false);
 
     private void Awake()
@@ -93,48 +103,43 @@ public class Player : MonoBehaviour {
 
 
         //We do nothing if the player is still moving.
-        if (isMoving || onCooldown || onExit ) return;
+        if (isMoving || onExit ) return;
 
-        //To store move directions.
-        int horizontal = 0;
-        int vertical = 0;
+
         //To get move directions
-        horizontal = (int)(Input.GetAxisRaw("Horizontal"));
-        vertical = (int)(Input.GetAxisRaw("Vertical"));
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
         //We can't go in both directions at the same time
-        if ( horizontal != 0 )
-            vertical = 0;
+        if ( horizontal != 0f )
+        {
+            vertical = 0f;
+        }
       
         //If there's a direction, we try to move.
         if (horizontal != 0 || vertical != 0)
         {
-            StartCoroutine(actionCooldown(0.2f));
-            Move(horizontal, vertical);
+            Move(new Vector2(horizontal, vertical));
         }
 
 	}
 
-    private void Move(int xDir, int yDir)
+    private void Move(Vector2 direction)
     {
 
 
         Vector2 startPos = transform.position;
-        Vector2 endPos = startPos + new Vector2(xDir, yDir).normalized;
+        Vector2 endPos = startPos + direction.normalized;
 
-        
-        bool isOnGround = map.IsGround(startPos); //If the player is on the ground
-        bool isOnBridge = map.IsBridge(startPos); //If the player is on a bridge
-
-        bool hasGroundTile = map.IsGround(endPos); //If target Tile has a ground
-        bool hasObstacleTile = map.IsObstacle(endPos); //if target Tile has an obstacle
-
-
+        //Huge function that verify if the player can move to the next tile.
         bool canWalk = map.CanMoveFromTo(this, transform.position, endPos);
 
         bool hasBridgeTile = map.IsBridge(endPos); //if target Tile has a bridge (plank)
 
+        //If the player is allowed to move to the next tile.
         if (canWalk)
         {
+            //Play sound depending on the kind of ground
             if (hasBridgeTile)
             {
                 audioPlayer.PlaySound(bridgeStep);
@@ -143,7 +148,7 @@ public class Player : MonoBehaviour {
                 audioPlayer.PlaySound(grassStep);
             }
 
-            StartCoroutine(SmoothMovement(endPos));
+            StartCoroutine(SmoothMovement(endPos, moveTime, cooldownMovement));
         }
         else
         {
@@ -153,25 +158,31 @@ public class Player : MonoBehaviour {
 
     }
 
-    private IEnumerator SmoothMovement(Vector3 end)
+    private IEnumerator SmoothMovement(Vector3 end, float moveTime, float cooldown)
     {
-        //while (isMoving) yield return null;
-
+        //Can't take another action while moving
         isMoving = true;
 
+        float timer = 0f;
+        Vector3 startingPos = transform.position;
 
-        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-        float inverseMoveTime = 1 / moveTime;
-
-        while (sqrRemainingDistance > float.Epsilon)
+        while (timer < moveTime)
         {
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
-            transform.position = newPosition;
-            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-
             yield return null;
+
+            timer += Time.deltaTime;
+            transform.position = Vector3.Lerp(startingPos, end, timer / moveTime);
+
         }
 
+        //Be sure that the player snaps to the end position.
+        transform.position = end;
+
+        //If there's a cooldown, we keep movement disabled for an extra time.
+        if (cooldown > 0f)
+        {
+            yield return new WaitForSeconds(cooldown);
+        }
 
         isMoving = false;
     }
@@ -180,60 +191,23 @@ public class Player : MonoBehaviour {
     private IEnumerator BlockedMovement(Vector3 end)
     {
 
-        isMoving = true;
-
-        //Don't play the blocked sound if there's a lever, no negative feedback.
+        //Play the blocked sound only if there's no lever, no negative feedback.
         if (!map.HasLever(end))
+        {
             audioPlayer.PlaySound(blockedStep);
+        }
 
         Vector3 originalPos = transform.position;
+        Vector3 blockedEnd = transform.position + ((end - transform.position) / 3);
 
-        end = transform.position + ((end - transform.position) / 3);
-        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-        float inverseMoveTime = (1 / (moveTime*2) );
+        //We move normally to one-third of the way to the next tile, then return to our original pos.
 
-        while (sqrRemainingDistance > float.Epsilon)
-        {
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
-            transform.position = newPosition;
-            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+        yield return SmoothMovement(blockedEnd, moveTime / 2f, 0f);
 
-            yield return null;
-        }
+        //The next yield won't start before the previous coroutine has ended.
 
-        sqrRemainingDistance = (transform.position - originalPos).sqrMagnitude;
-        while (sqrRemainingDistance > float.Epsilon)
-        {
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, originalPos, inverseMoveTime * Time.deltaTime);
-            transform.position = newPosition;
-            sqrRemainingDistance = (transform.position - originalPos).sqrMagnitude;
+        yield return SmoothMovement(originalPos, moveTime / 2f, cooldownMovement);
 
-            yield return null;
-        }
-
-        /*
-        //The lever disable the sound so its doesn't overlap with this one, so it blocked has been muted, we restore it.
-        if ( AudioManager.getInstance() != null && AudioManager.getInstance().Find("blocked").source.mute )
-        {
-            AudioManager.getInstance().Find("blocked").source.Stop();
-            AudioManager.getInstance().Find("blocked").source.mute = false;
-        } */
-
-        isMoving = false;
-    }
-
-    private IEnumerator actionCooldown(float cooldown)
-    {
-        onCooldown = true;
-
-        //float cooldown = 0.2f;
-        while ( cooldown > 0f )
-        {
-            cooldown -= Time.deltaTime;
-            yield return null;
-        }
-
-        onCooldown = false;
     }
 
 

@@ -97,11 +97,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGlobalReference: {fileID: 11400000, guid: 328c0bac9a1e368489bf9dfc7fcc609c, type: 2}
+  woodCountStartingValue: 0
   woodCount: {fileID: 11400000, guid: dca2897ed3933a443968c5a42d76354e, type: 2}
   keyCount: {fileID: 11400000, guid: 10f8c6d6b9783a643a744c1ae24eb16e, type: 2}
   isMoving: 0
-  onCooldown: 0
   onExit: 0
+  moveTime: 0.15
+  cooldownMovement: 0.1
   audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
   grassStep: {fileID: 11400000, guid: 2fd585455fdfeb94380e6b72089ed39d, type: 2}
   bridgeStep: {fileID: 11400000, guid: a0e6ea0473194db4c9e399661119e82c, type: 2}

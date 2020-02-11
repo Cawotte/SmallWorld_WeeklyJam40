@@ -45,10 +45,10 @@ public class Teleporter : MonoBehaviour {
         if (isTeleporting) yield break;
 
         //We wait for any other movement coroutines to finish before starting this one.
-        while (player.isMoving) yield return null;
+        while (player.IsMoving) yield return null;
 
         //we prevent the player from moving while teleporting
-        player.isMoving= true;
+        player.IsMoving = true;
 
         //Staircase sound!
         audioPlayer.PlaySound(staircaseSound);
@@ -80,7 +80,7 @@ public class Teleporter : MonoBehaviour {
         }
 
         //We allow the player to move again
-        player.isMoving = false;
+        player.IsMoving = false;
         //We set both teleporter as "Available"
         isTeleporting = false; exitPassage.isTeleporting = false;
     }

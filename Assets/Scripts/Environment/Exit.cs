@@ -30,7 +30,7 @@ public class Exit : MonoBehaviour
 
             audioPlayer.PlaySound(endLevel);
 
-            player.onExit = true; //Prevent the player from moving.
+            player.OnExit = true; //Prevent the player from moving.
             Invoke("NextLevel", 1f);
         }
     }
