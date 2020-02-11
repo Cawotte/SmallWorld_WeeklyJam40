@@ -112,3 +112,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
   endLevel: {fileID: 11400000, guid: e284c7f3a6981234e83c0c0f8eb48c13, type: 2}
+  timeBeforeStartNextLevel: 0.1

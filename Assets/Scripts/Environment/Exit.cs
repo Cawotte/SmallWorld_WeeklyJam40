@@ -13,6 +13,9 @@ public class Exit : MonoBehaviour
     [SerializeField]
     private Sound endLevel = null;
 
+    [SerializeField]
+    private float timeBeforeStartNextLevel = 0.5f;
+
     private AudioSourcePlayer audioPlayer = null;
     private void Awake()
     {
@@ -30,8 +33,10 @@ public class Exit : MonoBehaviour
 
             audioPlayer.PlaySound(endLevel);
 
-            player.OnExit = true; //Prevent the player from moving.
-            Invoke("NextLevel", 1f);
+            float totalWaitTime = endLevel.clip.length + timeBeforeStartNextLevel;
+
+            player.AddCooldown(totalWaitTime);
+            Invoke("NextLevel", totalWaitTime);
         }
     }
 

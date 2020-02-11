@@ -8,9 +8,10 @@ public class Teleporter : MonoBehaviour {
     [SerializeField]
     private Teleporter exitPassage;
 
-    [HideInInspector] public bool isTeleporting = false;
+    private bool isTeleporting = false;
 
-    private float teleportDuration = 0.2f;
+    [SerializeField]
+    private float teleportDuration = 0.4f;
 
 
     [Header("Audio")]
@@ -37,53 +38,40 @@ public class Teleporter : MonoBehaviour {
         }
     }
 
-
-    public IEnumerator Teleport(Player player, float aTime)
+    public IEnumerator Teleport(Player player, float teleportationTime)
     {
 
         //If the teleporter is in use, abort
         if (isTeleporting) yield break;
 
         //We wait for any other movement coroutines to finish before starting this one.
-        while (player.IsMoving) yield return null;
+        while (player.IsMoving) 
+            yield return null;
 
         //we prevent the player from moving while teleporting
-        player.IsMoving = true;
+        player.AddCooldown(teleportationTime);
 
         //Staircase sound!
         audioPlayer.PlaySound(staircaseSound);
 
-        Debug.Log("Teleporting from " + name);
-
         //We set both teleporters as "In Use"
-        isTeleporting = true; exitPassage.isTeleporting = true;
+        isTeleporting = true; 
+        exitPassage.isTeleporting = true;
 
-        float alpha = player.GetComponent<Renderer>().material.color.a;
+        //Fade the player to transparency
+        yield return StartCoroutine(player.FadePlayerTo(0f, teleportationTime / 2f));
 
-        //The character disappear
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, 0f, t));
-            player.GetComponent<Renderer>().material.color = newColor;
-            yield return null;
-        }
-        
-        //Now me teleport the player
+        //Teleport!
         player.transform.position = exitPassage.transform.position;
 
-        //The character fades back to reality 
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(0f, alpha, t));
-            player.GetComponent<Renderer>().material.color = newColor;
-            yield return null;
-        }
+        //Fade them back to reality
+        yield return StartCoroutine(player.FadePlayerTo(1f, teleportationTime / 2f));
 
-        //We allow the player to move again
-        player.IsMoving = false;
         //We set both teleporter as "Available"
-        isTeleporting = false; exitPassage.isTeleporting = false;
+        isTeleporting = false; 
+        exitPassage.isTeleporting = false;
     }
+
 
     private void OnDrawGizmos()
     {

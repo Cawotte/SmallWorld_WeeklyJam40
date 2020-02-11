@@ -37,7 +37,10 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     [ReadOnly]
-    private bool onExit = false;
+    /* Has long as cooldown is not equal to 0, the player movements are disabled.
+    This allow to keep movements disabled if several function triggers a cooldown
+    that would end on different times*/
+    private int cooldownCount = 0;
 
     [SerializeField]
     private float moveTime = 0.1f;
@@ -57,6 +60,10 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private Sound blockedStep = null;
+
+    //
+
+    private SpriteRenderer sr = null;
 
     public int WoodCount
     {
@@ -82,14 +89,22 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public bool IsMoving { get => isMoving; set => isMoving = value; }
-    public bool OnExit { get => onExit; set => onExit = value; }
+    public bool HasCooldown
+    {
+        get
+        {
+            return cooldownCount > 0;
+        }
+    }
+
+    public bool IsMoving { get => isMoving; }
 
     //Screen.SetResolution(1280, 600, false);
 
     private void Awake()
     {
         audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
+        sr = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -103,7 +118,7 @@ public class Player : MonoBehaviour {
 
 
         //We do nothing if the player is still moving.
-        if (isMoving || onExit ) return;
+        if (isMoving || HasCooldown) return;
 
 
         //To get move directions
@@ -123,6 +138,11 @@ public class Player : MonoBehaviour {
         }
 
 	}
+
+    public void AddCooldown(float duration)
+    {
+        StartCoroutine(_AddCooldown(duration));
+    }
 
     private void Move(Vector2 direction)
     {
@@ -148,7 +168,7 @@ public class Player : MonoBehaviour {
                 audioPlayer.PlaySound(grassStep);
             }
 
-            StartCoroutine(SmoothMovement(endPos, moveTime, cooldownMovement));
+            StartCoroutine(MoveTo(endPos, moveTime, cooldownMovement));
         }
         else
         {
@@ -158,7 +178,7 @@ public class Player : MonoBehaviour {
 
     }
 
-    private IEnumerator SmoothMovement(Vector3 end, float moveTime, float cooldown)
+    private IEnumerator MoveTo(Vector3 end, float moveTime, float cooldown)
     {
         //Can't take another action while moving
         isMoving = true;
@@ -178,13 +198,14 @@ public class Player : MonoBehaviour {
         //Be sure that the player snaps to the end position.
         transform.position = end;
 
+        isMoving = false;
+
         //If there's a cooldown, we keep movement disabled for an extra time.
         if (cooldown > 0f)
         {
-            yield return new WaitForSeconds(cooldown);
+            AddCooldown(cooldownMovement);
         }
 
-        isMoving = false;
     }
 
     //Blocked animation
@@ -202,14 +223,57 @@ public class Player : MonoBehaviour {
 
         //We move normally to one-third of the way to the next tile, then return to our original pos.
 
-        yield return SmoothMovement(blockedEnd, moveTime / 2f, 0f);
+        yield return MoveTo(blockedEnd, moveTime / 2f, 0f);
 
         //The next yield won't start before the previous coroutine has ended.
 
-        yield return SmoothMovement(originalPos, moveTime / 2f, cooldownMovement);
+        yield return MoveTo(originalPos, moveTime / 2f, cooldownMovement);
 
     }
 
+    public IEnumerator FadePlayerTo(float alpha, float durationFading)
+    {
 
+        float startingAlpha = sr.color.a;
+        float timer = 0f;
+
+        while (timer < durationFading)
+        {
+            float newAlpha = Mathf.Lerp(startingAlpha, alpha, timer / durationFading);
+
+            //Set new alpha
+            SetAlphaSprite(newAlpha);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //Snap to final alpha
+        SetAlphaSprite(alpha);
+    }
+
+    /// <summary>
+    /// Add a cooldown for the given duration. As long as cooldown is not equal to 0,
+    /// the player can't take a new action.
+    /// Useful because several function may trigger cooldowns at different times, and it
+    /// allows to avoid race errors. (EndMovement + Teleporting in this case)
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    private IEnumerator _AddCooldown(float duration)
+    {
+        cooldownCount++;
+
+        yield return new WaitForSeconds(duration);
+
+        cooldownCount--;
+    }
+
+    private void SetAlphaSprite(float alpha)
+    {
+        Color newColor = sr.color;
+        newColor.a = alpha;
+        sr.color = newColor;
+    }
 
 }
