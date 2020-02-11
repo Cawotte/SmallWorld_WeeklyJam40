@@ -101,7 +101,7 @@ MonoBehaviour:
   woodCount: {fileID: 11400000, guid: dca2897ed3933a443968c5a42d76354e, type: 2}
   keyCount: {fileID: 11400000, guid: 10f8c6d6b9783a643a744c1ae24eb16e, type: 2}
   isMoving: 0
-  onExit: 0
+  cooldownCount: 0
   moveTime: 0.15
   cooldownMovement: 0.1
   audioManager: {fileID: 11400000, guid: 6330d835ed2d66047be70037d349914e, type: 2}
@@ -165,7 +165,7 @@ Animator:
   m_GameObject: {fileID: 884637190466962886}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 764c988c1466b4d478ffea4ebb6060a3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
