@@ -85,7 +85,7 @@ public class Player : MonoBehaviour {
         }
         set
         {
-            woodCount.Value = value;
+            keyCount.Value = value;
         }
     }
 
