@@ -111,5 +111,5 @@ MonoBehaviour:
   m_UpscaleRT: 1
   m_PixelSnapping: 0
   m_CropFrameX: 0
-  m_CropFrameY: 1
+  m_CropFrameY: 0
   m_StretchFill: 1
