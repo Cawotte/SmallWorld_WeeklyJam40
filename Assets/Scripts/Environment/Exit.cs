@@ -22,6 +22,24 @@ public class Exit : MonoBehaviour
         audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
     }
 
+    //Disable those in builds
+//#if UNITY_EDITOR
+    private void Update()
+    {
+
+        //Cheat code previous/next levels
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            NextLevel();
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            if (SceneManager.GetActiveScene().buildIndex > 0)
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1, LoadSceneMode.Single);
+        }
+    }
+//#endif
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Player player = collision.GetComponent<Player>();

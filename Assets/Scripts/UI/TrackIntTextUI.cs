@@ -2,26 +2,53 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class TrackIntTextUI : GameEventListener
 {
-    private TextMeshProUGUI textMeshPro;
 
-    private void Awake()
-    {
-        textMeshPro = GetComponent<TextMeshProUGUI>();
+    [SerializeField]
+    private string preNumberText = "";
 
-    }
+    [SerializeField]
+    private bool hideIfZero = true;
+
+    [SerializeField]
+    private Image parentPanel = null;
+
+    private bool gameIsRunning = false;
 
     private void Start()
+    {
+        UpdateTextValue();
+        gameIsRunning = true;
+    }
+
+    private void OnValidate()
     {
         UpdateTextValue();
     }
 
     public void UpdateTextValue()
     {
-        textMeshPro.text = ((IntVariable)Event).Value.ToString();
+        TextMeshProUGUI textMeshPro = GetComponent<TextMeshProUGUI>();
+        int value = ((IntVariable)Event).Value;
+
+        if (hideIfZero && value == 0)
+        {
+            textMeshPro.text = "";
+            parentPanel.enabled = false;
+        }
+        else
+        {
+            textMeshPro.text = preNumberText + value.ToString();
+            parentPanel.enabled = true;
+
+            //When the game runs, we only hide the text at the beginning.
+            if (gameIsRunning)
+                hideIfZero = false;
+        }
     }
 
     //When the attached IntVariable is modified, call this function

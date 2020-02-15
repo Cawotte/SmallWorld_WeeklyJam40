@@ -105,12 +105,13 @@ public class Player : MonoBehaviour {
     {
         audioPlayer = AudioSourcePlayer.AddAsComponent(gameObject, audioManager);
         sr = GetComponent<SpriteRenderer>();
+        woodCount.Value = woodCountStartingValue;
+        keyCount.Value = 0;
     }
 
     private void Start()
     {
         map = mapGlobalReference.Map;
-        woodCount.Value = woodCountStartingValue;
     }
 
     // Update is called once per frame

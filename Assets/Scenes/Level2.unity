@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -196,6 +196,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2473033821726031443, guid: c28078268e39213419c7af322bc4e0f8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5277064052445184820, guid: c28078268e39213419c7af322bc4e0f8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -301,11 +306,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5277384615027734472, guid: c28078268e39213419c7af322bc4e0f8,
-        type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 1917709364}
     - target: {fileID: 5341726664825306948, guid: c28078268e39213419c7af322bc4e0f8,
         type: 3}
       propertyPath: m_Name
@@ -5702,36 +5702,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6844554885402829043, guid: 93549320fb8313341a45e4403533ba3f,
-        type: 3}
-      propertyPath: orthographic size
-      value: 6.609375
-      objectReference: {fileID: 0}
-    - target: {fileID: 6844554885402829043, guid: 93549320fb8313341a45e4403533ba3f,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6844554885402829043, guid: 93549320fb8313341a45e4403533ba3f,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.height
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6844554885402829043, guid: 93549320fb8313341a45e4403533ba3f,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 23
-      objectReference: {fileID: 0}
-    - target: {fileID: 6844554885402829044, guid: 93549320fb8313341a45e4403533ba3f,
-        type: 3}
-      propertyPath: m_CropFrameY
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6844554885402829044, guid: 93549320fb8313341a45e4403533ba3f,
-        type: 3}
-      propertyPath: m_CropFrameX
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6844554885402829047, guid: 93549320fb8313341a45e4403533ba3f,
         type: 3}
       propertyPath: m_Name
@@ -5739,9 +5709,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93549320fb8313341a45e4403533ba3f, type: 3}
---- !u!20 &1917709364 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6844554885402829043, guid: 93549320fb8313341a45e4403533ba3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1917709363}
-  m_PrefabAsset: {fileID: 0}
