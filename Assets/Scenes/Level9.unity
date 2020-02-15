@@ -5291,7 +5291,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300762, guid: 2e4b58c8841357748b874c5f3ddb23c8,
+      objectReference: {fileID: 21300796, guid: 2e4b58c8841357748b874c5f3ddb23c8,
         type: 3}
     - target: {fileID: 1904424909670019534, guid: ad7412224f0c3134794218d5940c346f,
         type: 3}
@@ -5825,6 +5825,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 309846779}
     m_Modifications:
+    - target: {fileID: 1769532426236559722, guid: ad7412224f0c3134794218d5940c346f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300666, guid: 2e4b58c8841357748b874c5f3ddb23c8,
+        type: 3}
     - target: {fileID: 1904424909670019534, guid: ad7412224f0c3134794218d5940c346f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5884,6 +5890,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LeveredDoor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011083470926044742, guid: ad7412224f0c3134794218d5940c346f,
+        type: 3}
+      propertyPath: isOpen
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad7412224f0c3134794218d5940c346f, type: 3}
@@ -6259,6 +6270,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 309846779}
     m_Modifications:
+    - target: {fileID: 1769532426236559722, guid: ad7412224f0c3134794218d5940c346f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300666, guid: 2e4b58c8841357748b874c5f3ddb23c8,
+        type: 3}
     - target: {fileID: 1904424909670019534, guid: ad7412224f0c3134794218d5940c346f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6319,6 +6336,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeveredDoor (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2011083470926044742, guid: ad7412224f0c3134794218d5940c346f,
+        type: 3}
+      propertyPath: isOpen
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad7412224f0c3134794218d5940c346f, type: 3}
 --- !u!114 &1898147150 stripped
@@ -6340,6 +6362,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 309846779}
     m_Modifications:
+    - target: {fileID: 1769532426236559722, guid: ad7412224f0c3134794218d5940c346f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300666, guid: 2e4b58c8841357748b874c5f3ddb23c8,
+        type: 3}
     - target: {fileID: 1904424909670019534, guid: ad7412224f0c3134794218d5940c346f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6399,6 +6427,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LeveredDoor (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011083470926044742, guid: ad7412224f0c3134794218d5940c346f,
+        type: 3}
+      propertyPath: isOpen
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad7412224f0c3134794218d5940c346f, type: 3}
