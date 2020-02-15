@@ -21,7 +21,7 @@ public class IntVariable : GameEvent, ISerializationCallbackReceiver
     public int InitialValue;
 
     //Runtime value that'll be edited during play mode
-    public int RuntimeValue;
+    public int RuntimeValue = 0;
 
     public int Value
     {
