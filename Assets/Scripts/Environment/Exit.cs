@@ -23,7 +23,7 @@ public class Exit : MonoBehaviour
     }
 
     //Disable those in builds
-//#if UNITY_EDITOR
+#if UNITY_EDITOR
     private void Update()
     {
 
@@ -38,7 +38,7 @@ public class Exit : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1, LoadSceneMode.Single);
         }
     }
-//#endif
+#endif
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
